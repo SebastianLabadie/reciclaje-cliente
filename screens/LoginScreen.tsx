@@ -1,4 +1,6 @@
 import { FontAwesome5 } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import React, { useState } from "react";
 import { FlatList, StyleSheet, Text } from "react-native";
 import {
@@ -14,8 +16,19 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [hidePass, setHidePass] = useState(true);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     console.log(email, password);
+
+    const res = false;
+    //const res = axios.post('','')
+
+    if (res) {
+      try {
+        await AsyncStorage.setItem("isLoged", "1");
+      } catch (e) {
+        console.log("error ");
+      }
+    }
   };
 
   return (
