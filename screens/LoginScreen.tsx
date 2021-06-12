@@ -2,29 +2,35 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React, { useState } from "react";
-import { FlatList, StyleSheet, Text } from "react-native";
+import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 import {
   TextInput,
-  TouchableHighlight,
   TouchableOpacity,
-  TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
+
+
+import { useDispatch } from "react-redux";
 import { View } from "../components/Themed";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hidePass, setHidePass] = useState(true);
+  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     console.log(email, password);
 
-    const res = false;
+    const res = true;
     //const res = axios.post('','')
 
     if (res) {
       try {
-        await AsyncStorage.setItem("isLoged", "1");
+        await AsyncStorage.setItem(
+          "isLoged",
+          JSON.stringify({ isLoged: true })
+        );
+        dispatch({ type: "SET_USER_STATE", payload: true });
       } catch (e) {
         console.log("error ");
       }
@@ -32,42 +38,48 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.logo}>Logo</Text>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Email..."
-          placeholderTextColor="#EFEFEF"
-          onChangeText={(text) => setEmail(text)}
-        />
-      </View>
-      <View style={styles.inputViewPassword}>
-        <TextInput
-          secureTextEntry={hidePass}
-          style={styles.inputTextPassword}
-          placeholder="Password..."
-          placeholderTextColor="#EFEFEF"
-          onChangeText={(text) => setPassword(text)}
-        />
-        <TouchableWithoutFeedback
-          style={{ backgroundColor: "transparent", padding: 10 }}
-          onPress={() => setHidePass(!hidePass)}
-        >
-          <FontAwesome5
-            name={hidePass ? "eye-slash" : "eye"}
-            size={18}
-            color="#EFEFEF"
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+      }}
+    >
+      <View  style={styles.container} >
+        <Text style={styles.logo}>Logo</Text>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Email..."
+            placeholderTextColor="#EFEFEF"
+            onChangeText={(text) => setEmail(text)}
           />
-        </TouchableWithoutFeedback>
+        </View>
+        <View style={styles.inputViewPassword}>
+          <TextInput
+            secureTextEntry={hidePass}
+            style={styles.inputTextPassword}
+            placeholder="Password..."
+            placeholderTextColor="#EFEFEF"
+            onChangeText={(text) => setPassword(text)}
+          />
+          <TouchableWithoutFeedback
+            style={{ backgroundColor: "transparent", padding: 10 }}
+            onPress={() => setHidePass(!hidePass)}
+          >
+            <FontAwesome5
+              name={hidePass ? "eye-slash" : "eye"}
+              size={18}
+              color="#EFEFEF"
+            />
+          </TouchableWithoutFeedback>
+        </View>
+        <TouchableOpacity>
+          <Text style={styles.forgot}>Olvidaste la contraseña?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+          <Text style={styles.loginText}>Iniciar Sesion</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity>
-        <Text style={styles.forgot}>Olvidaste la contraseña?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-        <Text style={styles.loginText}>Iniciar Sesion</Text>
-      </TouchableOpacity>
-    </View>
+      </TouchableWithoutFeedback>
   );
 }
 

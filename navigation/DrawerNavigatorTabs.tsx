@@ -2,19 +2,23 @@
 
 import 'react-native-gesture-handler';
 
-import * as React from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, TouchableOpacity, Image,Text } from 'react-native';
 
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import SidebarMenu from './SidebarMenu';
-import { Feather, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather, FontAwesome, MaterialCommunityIcons,SimpleLineIcons,FontAwesome5 } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
 import ScannQRScreen from '../screens/ScannQRScreen';
 import OrdenScreen from '../screens/OrdenScreen';
 import { LinearGradient } from 'expo-linear-gradient';
 import LoginScreen from '../screens/LoginScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import SignoutScreen from '../screens/SignoutScreen';
+import RequestCollectionScreen from '../screens/RequestCollectionScreen';
+import RequestBagsScreen from '../screens/RequestBagsScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -130,6 +134,7 @@ function HomeScreenStack({ navigation }:any) {
 }
 
 
+
 function LoginScreenStack({ navigation }:any) {
   return (
     <Stack.Navigator
@@ -150,6 +155,7 @@ function LoginScreenStack({ navigation }:any) {
         headerTitleStyle: {
           fontWeight: 'bold',
         },
+
       }}>
 
     <Stack.Screen
@@ -165,29 +171,177 @@ function LoginScreenStack({ navigation }:any) {
 }
 
 
-export function DrawerNavigatorTabs() {
+function SignoutScreenStack({ navigation }:any) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Signout"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerStructure navigationProps={navigation} />
+        ),
+        headerBackground: () => (
+          <LinearGradient
+          colors={['#667eea', '#764ba2']}
+          style={{ flex: 1 }}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+        />
+        ),
+        headerTintColor: '#fff', 
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+
+      }}>
+
+    <Stack.Screen
+        name="Signout"
+        component={SignoutScreen}
+        options={{
+          title: 'Salir', 
+        }}
+      />
+     
+    </Stack.Navigator>
+  );
+}
+
+
+function RequestCollectionScreenStack({ navigation }:any) {
+  return (
+    <Stack.Navigator
+      initialRouteName="RequestCollection"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerStructure navigationProps={navigation} />
+        ),
+        headerBackground: () => (
+          <LinearGradient
+          colors={['#667eea', '#764ba2']}
+          style={{ flex: 1 }}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+        />
+        ),
+        headerTintColor: '#fff', 
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+
+      }}>
+
+    <Stack.Screen
+        name="RequestCollection"
+        component={RequestCollectionScreen}
+        options={{
+          title: 'Solicitar Recolección', 
+        }}
+      />
+     
+    </Stack.Navigator>
+  );
+}
+
+
+function RequestBagsScreenStack({ navigation }:any) {
+  return (
+    <Stack.Navigator
+      initialRouteName="RequestBags"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerStructure navigationProps={navigation} />
+        ),
+        headerBackground: () => (
+          <LinearGradient
+          colors={['#667eea', '#764ba2']}
+          style={{ flex: 1 }}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+        />
+        ),
+        headerTintColor: '#fff', 
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+
+      }}>
+
+    <Stack.Screen
+        name="RequestBags"
+        component={RequestBagsScreen}
+        options={{
+          title: 'Solicitar Bolsas', 
+        }}
+      />
+     
+    </Stack.Navigator>
+  );
+}
+
+
+export  function DrawerNavigatorTabs() {
+  let isLoged
+  const userLoged = useSelector(state => state.auth.userLoged)
+  const dispatch = useDispatch()
+
+  const getIsloged = async () =>{
+    isLoged = await AsyncStorage.getItem("isLoged")
+    isLoged != null ? isLoged = JSON.parse(isLoged) : isLoged = {isLoged:false}
+    dispatch({type:'SET_USER_STATE',payload:isLoged.isLoged})
+    console.log('nav: ', isLoged)
+  }
+
+  useEffect(() => {
+    getIsloged()
+  }, [])
+
+
   return (
       <Drawer.Navigator
         drawerContentOptions={{
           activeTintColor: '#e91e63',
           itemStyle: { marginVertical: 5 },
         }}
+        drawerStyle={{width:'75%'}}
         drawerContent={(props) => <SidebarMenu {...props} />}>
-        <Drawer.Screen
-          name="Home"
-          options={{ drawerLabel: 'Home',  drawerIcon: (tabinfo) => <Feather name="log-out" size={20} color={tabinfo.color} /> }}
-          component={HomeScreenStack}
-        />
-        <Drawer.Screen
-        name="ScannQR"
-        options={{ drawerLabel: 'Escanear QR',  drawerIcon: (tabinfo) => <FontAwesome name="qrcode" size={24} color={tabinfo.color} /> }}
-        component={QRcreenStack}
-        />
+
+        {userLoged === false ? 
         <Drawer.Screen
         name="Login"
         options={{ drawerLabel: 'Iniciar Sesion',  drawerIcon: (tabinfo) => <MaterialCommunityIcons name="login" size={24} color={tabinfo.color} />}}
         component={LoginScreenStack}
         />
+        :
+        <>
+          <Drawer.Screen
+            name="Home"
+            options={{ drawerLabel: 'Home',  drawerIcon: (tabinfo) => <Feather name="log-out" size={24} color={tabinfo.color} /> }}
+            component={HomeScreenStack}
+          />
+          <Drawer.Screen
+          name="ScannQR"
+          options={{ drawerLabel: 'Escanear QR',  drawerIcon: (tabinfo) => <FontAwesome name="qrcode" size={24} color={tabinfo.color} /> }}
+          component={QRcreenStack}
+          />
+          <Drawer.Screen
+          name="RequestCollection"
+          options={{ drawerLabel: 'Solicitar Recolección',  drawerIcon: (tabinfo) => <FontAwesome5 name="recycle" size={24} color={tabinfo.color} /> }}
+          component={RequestCollectionScreenStack}
+          />
+           <Drawer.Screen
+          name="RequestBags"
+          options={{ drawerLabel: 'Solicitar Bolsas',  drawerIcon: (tabinfo) => <SimpleLineIcons name="bag" size={24} color={tabinfo.color} /> }}
+          component={RequestBagsScreenStack}
+          />
+           <Drawer.Screen
+          name="Signout"
+          options={{ drawerLabel: 'Salir',  drawerIcon: (tabinfo) => <SimpleLineIcons name="logout" size={24} color={tabinfo.color} /> }}
+          component={SignoutScreen}
+          />
+         
+        </>}
+
+        
       </Drawer.Navigator>
   );
 }

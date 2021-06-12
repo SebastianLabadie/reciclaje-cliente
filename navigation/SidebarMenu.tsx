@@ -1,65 +1,53 @@
-import React from 'react';
+import React from "react";
 import {
   SafeAreaView,
   View,
   StyleSheet,
   Image,
   Text,
-  Linking,
-} from 'react-native';
+} from "react-native";
 
 import {
   DrawerContentScrollView,
   DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
+} from "@react-navigation/drawer";
+import { useDispatch, useSelector } from "react-redux";
+import { TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const SidebarMenu = (props:any) => {  
+const SidebarMenu = (props: any) => {
+
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {/*Top Large Image */}
       <Image
-        source={require('../assets/images/quecalvario.jpg')}
+        source={require("../assets/images/quecalvario.jpg")}
         style={styles.sideMenuProfileIcon}
       />
-      <DrawerContentScrollView {...props}>
-        <DrawerItemList {...props} />
-        <View style={styles.customItem}>
-        </View>
+      <DrawerContentScrollView {...props} >
+        <DrawerItemList {...props} labelStyle={{fontSize:16 }} />
+        <View style={styles.customItem}></View>
       </DrawerContentScrollView>
-      <Text style={styles.txtLink}>
-        www.calvario.com
-      </Text>
+
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   sideMenuProfileIcon: {
-    resizeMode: 'center',
+    resizeMode: "center",
     width: 150,
     height: 150,
     borderRadius: 100 / 2,
-    marginTop:50,
-    alignSelf: 'center',
-  },
-  iconStyle: {
-    width: 15,
-    height: 15,
-    marginHorizontal: 5,
+    marginTop: 50,
+    alignSelf: "center",
   },
   customItem: {
     padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  txtLink:{
-    fontSize: 16, 
-    textAlign: 'center', 
-    color: 'grey',
-    marginBottom:10 
-  },
+    flexDirection: "row",
+    alignItems: "center",
+  }
 });
 
 export default SidebarMenu;
