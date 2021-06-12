@@ -336,7 +336,7 @@ export  function DrawerNavigatorTabs() {
            <Drawer.Screen
           name="Signout"
           options={{ drawerLabel: 'Salir',  drawerIcon: (tabinfo) => <SimpleLineIcons name="logout" size={24} color={tabinfo.color} /> }}
-          component={SignoutScreen}
+          component={SignoutScreenStack}
           />
          
         </>}

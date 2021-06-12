@@ -2,15 +2,15 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React, { useState } from "react";
-import { Keyboard, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
+import {  StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 import {
   TextInput,
   TouchableOpacity,
 } from "react-native-gesture-handler";
 
-
 import { useDispatch } from "react-redux";
 import { View } from "../components/Themed";
+import KeyboardWithDissmis from '../components/KeyboardWithDissmis/KeyboardWithDissmis'
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -38,11 +38,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}
-    >
+   <KeyboardWithDissmis>
       <View  style={styles.container} >
         <Text style={styles.logo}>Logo</Text>
         <View style={styles.inputView}>
@@ -79,7 +75,7 @@ export default function LoginScreen() {
           <Text style={styles.loginText}>Iniciar Sesion</Text>
         </TouchableOpacity>
       </View>
-      </TouchableWithoutFeedback>
+   </KeyboardWithDissmis>
   );
 }
 
