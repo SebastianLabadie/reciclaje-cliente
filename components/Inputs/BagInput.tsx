@@ -2,6 +2,7 @@ import React from 'react'
 import {View,StyleSheet,Text} from 'react-native'
 import {SimpleLineIcons} from '@expo/vector-icons'
 import UnderlineInput from './UnderlineInput'
+import Colors from '../../constants/Colors'
 
 function BagInput({placeholder,bagColor,onChange,value}:any) {
     return (
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
       },
     inputText:{
       width: "80%",
-      color:'white',
+      color:Colors.light.text,
       height: 50,
       justifyContent: "center",
       padding: 10,

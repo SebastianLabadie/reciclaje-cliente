@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {View,StyleSheet,Text,TextInput, Button} from 'react-native'
 import KeyboardWithDissmis from '../components/KeyboardWithDissmis/KeyboardWithDissmis'
 import BagInput from '../components/Inputs/BagInput'
+import Colors from '../constants/Colors'
 function RequestBagsScreen() {
     const [yellowBags, setYellowBags] = useState("10")
     const [redBags, setRedBags] = useState("10")
@@ -26,9 +27,10 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor:Colors.light.background
       },
       title:{
-          color:'white',
+          color:Colors.light.text,
           fontSize:20,
           fontWeight:'bold',
           textDecorationLine:'underline',

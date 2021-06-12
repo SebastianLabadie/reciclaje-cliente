@@ -9,7 +9,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import SidebarMenu from './SidebarMenu';
 import { Feather, FontAwesome, MaterialCommunityIcons,SimpleLineIcons,FontAwesome5 } from '@expo/vector-icons';
-import HomeScreen from '../screens/HomeScreen';
 import ScannQRScreen from '../screens/ScannQRScreen';
 import OrdenScreen from '../screens/OrdenScreen';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -19,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SignoutScreen from '../screens/SignoutScreen';
 import RequestCollectionScreen from '../screens/RequestCollectionScreen';
 import RequestBagsScreen from '../screens/RequestBagsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -99,10 +99,10 @@ function QRcreenStack({ navigation }:any) {
   );
 }
 
-function HomeScreenStack({ navigation }:any) {
+function ProfileScreenStack({ navigation }:any) {
   return (
     <Stack.Navigator
-      initialRouteName="Home"
+      initialRouteName="Profile"
       screenOptions={{
         headerLeft: () => (
           <NavigationDrawerStructure navigationProps={navigation} />
@@ -122,10 +122,10 @@ function HomeScreenStack({ navigation }:any) {
 
       }}>
       <Stack.Screen
-        name="Home"
-        component={HomeScreen}
+        name="Profile"
+        component={ProfileScreen}
         options={{
-          title: 'Home Page', 
+          title: 'Perfil', 
         }}
       />
      
@@ -134,7 +134,7 @@ function HomeScreenStack({ navigation }:any) {
 }
 
 
-
+/* 
 function LoginScreenStack({ navigation }:any) {
   return (
     <Stack.Navigator
@@ -168,7 +168,7 @@ function LoginScreenStack({ navigation }:any) {
      
     </Stack.Navigator>
   );
-}
+} */
 
 
 function SignoutScreenStack({ navigation }:any) {
@@ -309,14 +309,14 @@ export  function DrawerNavigatorTabs() {
         <Drawer.Screen
         name="Login"
         options={{ drawerLabel: 'Iniciar Sesion',  drawerIcon: (tabinfo) => <MaterialCommunityIcons name="login" size={24} color={tabinfo.color} />}}
-        component={LoginScreenStack}
+        component={LoginScreen}
         />
         :
         <>
           <Drawer.Screen
-            name="Home"
-            options={{ drawerLabel: 'Home',  drawerIcon: (tabinfo) => <Feather name="log-out" size={24} color={tabinfo.color} /> }}
-            component={HomeScreenStack}
+            name="Profile"
+            options={{ drawerLabel: 'Perfil',  drawerIcon: (tabinfo) => <FontAwesome name="user-o" size={24} color={tabinfo.color}  />}}
+            component={ProfileScreenStack}
           />
           <Drawer.Screen
           name="ScannQR"

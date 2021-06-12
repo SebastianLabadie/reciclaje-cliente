@@ -1,14 +1,15 @@
 
 import * as React from "react";
-import { FlatList, StyleSheet, Text } from "react-native";
+import {  StyleSheet, Text } from "react-native";
 import { View } from "../components/Themed";
+import Colors from "../constants/Colors";
 
 
-export default function HomeScreen() {
+export default function ProfileScreen() {
   
   return (
     <View style={styles.screen}>
-    <Text style={{color:'white'}}>HOME</Text>
+    <Text style={{color:'black'}}>Profile</Text>
     </View>
   );
 }
@@ -18,5 +19,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor:Colors.light.background
   },
 });

@@ -1,22 +1,37 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import React, { useState } from "react";
-import {  StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
-import {
-  TextInput,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet, Text, TouchableWithoutFeedback,Animated } from "react-native";
+import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 
 import { useDispatch } from "react-redux";
 import { View } from "../components/Themed";
-import KeyboardWithDissmis from '../components/KeyboardWithDissmis/KeyboardWithDissmis'
+import KeyboardWithDissmis from "../components/KeyboardWithDissmis/KeyboardWithDissmis";
+import Colors from "../constants/Colors";
+import WaveBG from "../components/WaveBG/WaveBG";
+import { Image } from "react-native";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hidePass, setHidePass] = useState(true);
   const dispatch = useDispatch();
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const fadeIn = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true 
+    }).start();
+  };
+
+
+  useEffect(() => {
+    fadeIn()
+  }, [])
 
   const handleLogin = async () => {
     console.log(email, password);
@@ -38,58 +53,69 @@ export default function LoginScreen() {
   };
 
   return (
-   <KeyboardWithDissmis>
-      <View  style={styles.container} >
-        <Text style={styles.logo}>Logo</Text>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.inputText}
-            placeholder="Email..."
-            placeholderTextColor="#EFEFEF"
-            onChangeText={(text) => setEmail(text)}
-          />
-        </View>
-        <View style={styles.inputViewPassword}>
-          <TextInput
-            secureTextEntry={hidePass}
-            style={styles.inputTextPassword}
-            placeholder="Password..."
-            placeholderTextColor="#EFEFEF"
-            onChangeText={(text) => setPassword(text)}
-          />
-          <TouchableWithoutFeedback
-            style={{ backgroundColor: "transparent", padding: 10 }}
-            onPress={() => setHidePass(!hidePass)}
-          >
-            <FontAwesome5
-              name={hidePass ? "eye-slash" : "eye"}
-              size={18}
-              color="#EFEFEF"
+    <KeyboardWithDissmis>
+      <View style={styles.screen}>
+        <WaveBG title='¡Por un mundo Mejor!' /> 
+        <Animated.View style={[styles.loginFormContainer, { opacity: fadeAnim}]}>
+          <Image source={require('../assets/images/LogoReciclaje.png')} style={styles.logo} />
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="Email..."
+              placeholderTextColor="#EFEFEF"
+              onChangeText={(text) => setEmail(text)}
             />
-          </TouchableWithoutFeedback>
-        </View>
-        <TouchableOpacity>
-          <Text style={styles.forgot}>Olvidaste la contraseña?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-          <Text style={styles.loginText}>Iniciar Sesion</Text>
-        </TouchableOpacity>
+          </View>
+          <View style={styles.inputViewPassword}>
+            <TextInput
+              secureTextEntry={hidePass}
+              style={styles.inputTextPassword}
+              placeholder="Password..."
+              placeholderTextColor="#EFEFEF"
+              onChangeText={(text) => setPassword(text)}
+            />
+            <TouchableWithoutFeedback
+              style={{ backgroundColor: "transparent", padding: 10 }}
+              onPress={() => setHidePass(!hidePass)}
+            >
+              <FontAwesome5
+                name={hidePass ? "eye-slash" : "eye"}
+                size={18}
+                color="#EFEFEF"
+              />
+            </TouchableWithoutFeedback>
+          </View>
+          <TouchableOpacity>
+            <Text style={styles.forgot}>Olvidaste la contraseña?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+            <Text style={styles.loginText}>Iniciar Sesion</Text>
+          </TouchableOpacity>
+        
+        </Animated.View>
       </View>
-   </KeyboardWithDissmis>
+    </KeyboardWithDissmis>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
+    position: "relative",
+    backgroundColor: Colors.light.background,
+  },
+  loginFormContainer: {
+    position: "absolute",
+    width:'100%',
+    top: 300,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: Colors.light.background,
   },
   logo: {
-    fontWeight: "bold",
-    fontSize: 50,
-    color: "#fb5b5a",
-    marginBottom: 40,
+    width:150,
+    height:160,
+    marginBottom: 30,
   },
   inputView: {
     width: "80%",
@@ -121,20 +147,21 @@ const styles = StyleSheet.create({
     color: "white",
   },
   forgot: {
-    color: "white",
-    fontSize: 11,
+    color: Colors.light.text,
+    fontSize: 12,
   },
   loginBtn: {
-    backgroundColor: "#fb5b5a",
+    backgroundColor: Colors.primary,
     borderRadius: 25,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
     marginBottom: 10,
-    padding: 20,
+    paddingVertical:15,
+    paddingHorizontal:40
   },
   loginText: {
-    color: "white",
+    color: Colors.light.text,
   },
 });
