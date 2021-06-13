@@ -19,6 +19,9 @@ export default function LoginScreen() {
   const dispatch = useDispatch();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const translateXAnim = useRef(new Animated.Value(300)).current;
+  const translateYPlusAnim = useRef(new Animated.Value(-300)).current;
+  const translateYMinusAnim = useRef(new Animated.Value(300)).current;
 
   const fadeIn = () => {
     Animated.timing(fadeAnim, {
@@ -28,9 +31,39 @@ export default function LoginScreen() {
     }).start();
   };
 
+  const translateXIn = () => {
+    Animated.timing(translateXAnim, {
+      toValue: 0,
+      duration: 1500,
+      useNativeDriver: true 
+    }).start();
+  };
+
+  const translateYPlusIn = () => {
+    Animated.timing(translateYPlusAnim, {
+      toValue: 0,
+      duration: 1500,
+      useNativeDriver: true 
+    }).start();
+  };
+
+  const translateYMiunsIn = () => {
+    Animated.timing(translateYMinusAnim, {
+      toValue: 0,
+      duration: 1500,
+      useNativeDriver: true 
+    }).start();
+  };
+
+  const startAnimations = ()=>{
+    fadeIn()
+    translateXIn()
+    translateYPlusIn()
+    translateYMiunsIn()
+  }
 
   useEffect(() => {
-    fadeIn()
+    startAnimations()
   }, [])
 
   const handleLogin = async () => {
@@ -57,16 +90,16 @@ export default function LoginScreen() {
       <View style={styles.screen}>
         <WaveBG title='¡Por un mundo Mejor!' /> 
         <Animated.View style={[styles.loginFormContainer, { opacity: fadeAnim}]}>
-          <Image source={require('../assets/images/LogoReciclaje.png')} style={styles.logo} />
-          <View style={styles.inputView}>
+          <Animated.Image source={require('../assets/images/LogoReciclaje.png')} style={[styles.logo,{transform:[{translateY:translateYPlusAnim}]}]} />
+          <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
             <TextInput
               style={styles.inputText}
               placeholder="Email..."
               placeholderTextColor="#EFEFEF"
               onChangeText={(text) => setEmail(text)}
             />
-          </View>
-          <View style={styles.inputViewPassword}>
+          </Animated.View>
+          <Animated.View style={[styles.inputViewPassword,{transform:[{translateX:translateXAnim}]}]} >
             <TextInput
               secureTextEntry={hidePass}
               style={styles.inputTextPassword}
@@ -84,13 +117,15 @@ export default function LoginScreen() {
                 color="#EFEFEF"
               />
             </TouchableWithoutFeedback>
-          </View>
-          <TouchableOpacity>
-            <Text style={styles.forgot}>Olvidaste la contraseña?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-            <Text style={styles.loginText}>Iniciar Sesion</Text>
-          </TouchableOpacity>
+          </Animated.View>
+          <Animated.View style={[styles.btnsContainer,{transform:[{translateY:translateYMinusAnim}]}]}>
+            <TouchableOpacity>
+              <Text style={styles.forgot}>Olvidaste la contraseña?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+              <Text style={styles.loginText}>Iniciar Sesion</Text>
+            </TouchableOpacity>
+          </Animated.View>
         
         </Animated.View>
       </View>
@@ -145,6 +180,11 @@ const styles = StyleSheet.create({
   inputText: {
     height: 50,
     color: "white",
+  },
+  btnsContainer:{
+    backgroundColor:Colors.light.background,
+    justifyContent: "center",
+    alignItems: "center",
   },
   forgot: {
     color: Colors.light.text,

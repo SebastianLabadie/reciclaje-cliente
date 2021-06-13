@@ -6,7 +6,7 @@ import ModalTel from "../components/Modal/ModalTel";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/core";
 
-function ScannQRScreen() {
+function ScannBagsCollectinScreen() {
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -16,20 +16,8 @@ function ScannQRScreen() {
 
   const ONE_SECOND_IN_MS = 1000;
 
-  const getOrden = async ({EmpresaId,OrdenNro,ClienteNroOrd}:any) => {
-    console.log(`params ${EmpresaId} ${OrdenNro} ${ClienteNroOrd}`)
-
-    /* const res = await axios.post(
-      "http://10.200.5.20:8080/SIGA-SC/rest/pTestGetOrdenes",
-      {
-        EmpresaId,
-        OrdenNro,
-        ClienteNroOrd
-      }
-    );
-
-    console.log("data: ",res.data);
-    navigation.navigate('OrdenSRV',{Orden:res.data}) */
+  const getBagData = async ({}:any) => {
+   
   };
 
   useEffect(() => {
@@ -48,6 +36,7 @@ function ScannQRScreen() {
     setData(data);
     setType(type);
     setModalVisible(true);
+    alert(`Este es el tipo ${type} este es la data: ${data}`) 
   };
 
   if (hasPermission === null) {
@@ -69,14 +58,8 @@ function ScannQRScreen() {
       >
         <BarcodeMask edgeColor="#62B1F6" showAnimatedLine />
       </BarCodeScanner>
-      {/* {scanned ? <Button title={'Aprieta para escanear devuelta!'} onPress={handleScaned} /> : null} */}
-      <ModalTel
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        data={data}
-        type={type}
-        handleScaned={handleScaned}
-      ></ModalTel>
+       {scanned ? <Button title={'Aprieta para escanear devuelta!'} onPress={handleScaned} /> : null} 
+     
     </View>
   );
 }
@@ -87,4 +70,4 @@ const styles = StyleSheet.create({
     height: "100%",
   },
 });
-export default ScannQRScreen;
+export default ScannBagsCollectinScreen;

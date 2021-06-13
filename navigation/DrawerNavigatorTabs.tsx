@@ -8,7 +8,7 @@ import { View, TouchableOpacity, Image,Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import SidebarMenu from './SidebarMenu';
-import { Feather, FontAwesome, MaterialCommunityIcons,SimpleLineIcons,FontAwesome5 } from '@expo/vector-icons';
+import { Feather, FontAwesome, MaterialCommunityIcons,SimpleLineIcons,FontAwesome5,Ionicons } from '@expo/vector-icons';
 import ScannQRScreen from '../screens/ScannQRScreen';
 import OrdenScreen from '../screens/OrdenScreen';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -19,6 +19,8 @@ import SignoutScreen from '../screens/SignoutScreen';
 import RequestCollectionScreen from '../screens/RequestCollectionScreen';
 import RequestBagsScreen from '../screens/RequestBagsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import CollectionPointsScreen from '../screens/CollectionPointsScreen';
+import ScannBagsCollectinScreen from '../screens/ScannBagCollectionScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -134,43 +136,6 @@ function ProfileScreenStack({ navigation }:any) {
 }
 
 
-/* 
-function LoginScreenStack({ navigation }:any) {
-  return (
-    <Stack.Navigator
-      initialRouteName="Login"
-      screenOptions={{
-        headerLeft: () => (
-          <NavigationDrawerStructure navigationProps={navigation} />
-        ),
-        headerBackground: () => (
-          <LinearGradient
-          colors={['#667eea', '#764ba2']}
-          style={{ flex: 1 }}
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
-        />
-        ),
-        headerTintColor: '#fff', 
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-
-      }}>
-
-    <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{
-          title: 'Iniciar Sesion', 
-        }}
-      />
-     
-    </Stack.Navigator>
-  );
-} */
-
-
 function SignoutScreenStack({ navigation }:any) {
   return (
     <Stack.Navigator
@@ -237,7 +202,16 @@ function RequestCollectionScreenStack({ navigation }:any) {
           title: 'Solicitar Recolección', 
         }}
       />
-     
+
+              
+    <Stack.Screen
+        name="ScannBags"
+        component={ScannBagsCollectinScreen}
+        options={{
+          title: 'Escanear Bolsas', 
+        }}
+      />
+      
     </Stack.Navigator>
   );
 }
@@ -271,6 +245,43 @@ function RequestBagsScreenStack({ navigation }:any) {
         component={RequestBagsScreen}
         options={{
           title: 'Solicitar Bolsas', 
+        }}
+      />
+
+     
+    </Stack.Navigator>
+  );
+}
+
+
+function CollectionPointsScreenStack({ navigation }:any) {
+  return (
+    <Stack.Navigator
+      initialRouteName="CollectionPoints"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerStructure navigationProps={navigation} />
+        ),
+        headerBackground: () => (
+          <LinearGradient
+          colors={['#667eea', '#764ba2']}
+          style={{ flex: 1 }}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+        />
+        ),
+        headerTintColor: '#fff', 
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+
+      }}>
+
+    <Stack.Screen
+        name="CollectionPoints"
+        component={CollectionPointsScreen}
+        options={{
+          title: 'Puntos de Reciclaje', 
         }}
       />
      
@@ -334,11 +345,15 @@ export  function DrawerNavigatorTabs() {
           component={RequestBagsScreenStack}
           />
            <Drawer.Screen
+          name="CollectionPoints"
+          options={{ drawerLabel: 'Puntos de Reciclaje',  drawerIcon: (tabinfo) => <Ionicons name="location-sharp" size={24} color={tabinfo.color} /> }}
+          component={CollectionPointsScreenStack}
+          />
+          <Drawer.Screen
           name="Signout"
           options={{ drawerLabel: 'Salir',  drawerIcon: (tabinfo) => <SimpleLineIcons name="logout" size={24} color={tabinfo.color} /> }}
           component={SignoutScreenStack}
           />
-         
         </>}
 
         
