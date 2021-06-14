@@ -9,8 +9,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import SidebarMenu from './SidebarMenu';
 import { Feather, FontAwesome, MaterialCommunityIcons,SimpleLineIcons,FontAwesome5,Ionicons } from '@expo/vector-icons';
-import ScannQRScreen from '../screens/ScannQRScreen';
-import OrdenScreen from '../screens/OrdenScreen';
 import { LinearGradient } from 'expo-linear-gradient';
 import LoginScreen from '../screens/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -46,60 +44,6 @@ const NavigationDrawerStructure = (props:any) => {
     </View>
   );
 };
-
-function QRcreenStack({ navigation }:any) {
-  return (
-    <Stack.Navigator initialRouteName="ScannQR">
-      <Stack.Screen
-        name="ScannQR"
-        component={ScannQRScreen}
-        options={{
-          title: 'Escanear QR', //Set Header Title
-          headerLeft: () => (
-            <NavigationDrawerStructure navigationProps={navigation} />
-          ),
-          headerBackground: () => (
-            <LinearGradient
-            colors={['#667eea', '#764ba2']}
-            style={{ flex: 1 }}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-          />
-          ),
-          headerTintColor: '#fff', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
-          },
-        }}
-      />
-       <Stack.Screen
-        name="OrdenSRV"
-        component={OrdenScreen}
-        options={{
-          title: 'OrdenSRV', //Set Header Title
-          headerLeft: () => (
-            <NavigationDrawerStructure navigationProps={navigation} />
-          ),
-          headerBackground: () => (
-            <LinearGradient
-            colors={['#667eea', '#764ba2']}
-            style={{ flex: 1 }}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-          />
-          ),
-          headerStyle: {
-            backgroundColor: '#f4511e', //Set Header color
-          },
-          headerTintColor: '#fff', //Set Header text color
-          headerTitleStyle: {
-            fontWeight: 'bold', //Set Header text style
-          },
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
 
 function ProfileScreenStack({ navigation }:any) {
   return (
@@ -211,7 +155,7 @@ function RequestCollectionScreenStack({ navigation }:any) {
           title: 'Escanear Bolsas', 
         }}
       />
-      
+
     </Stack.Navigator>
   );
 }
@@ -328,11 +272,6 @@ export  function DrawerNavigatorTabs() {
             name="Profile"
             options={{ drawerLabel: 'Perfil',  drawerIcon: (tabinfo) => <FontAwesome name="user-o" size={24} color={tabinfo.color}  />}}
             component={ProfileScreenStack}
-          />
-          <Drawer.Screen
-          name="ScannQR"
-          options={{ drawerLabel: 'Escanear QR',  drawerIcon: (tabinfo) => <FontAwesome name="qrcode" size={24} color={tabinfo.color} /> }}
-          component={QRcreenStack}
           />
           <Drawer.Screen
           name="RequestCollection"

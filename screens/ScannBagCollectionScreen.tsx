@@ -5,6 +5,7 @@ import BarcodeMask from "react-native-barcode-mask";
 import ModalTel from "../components/Modal/ModalTel";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/core";
+import { useDispatch } from "react-redux";
 
 function ScannBagsCollectinScreen() {
   const [hasPermission, setHasPermission] = useState(false);
@@ -12,7 +13,7 @@ function ScannBagsCollectinScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [data, setData] = useState("");
   const [type, setType] = useState("");
-  const navigation = useNavigation()
+  const dispatch = useDispatch()
 
   const ONE_SECOND_IN_MS = 1000;
 
@@ -36,7 +37,9 @@ function ScannBagsCollectinScreen() {
     setData(data);
     setType(type);
     setModalVisible(true);
-    alert(`Este es el tipo ${type} este es la data: ${data}`) 
+    alert(`Este es el tipo ${type} este es la data: ${data}`)
+    const bag = JSON.parse(data)
+    dispatch({type:'ADD_BAG_TO_COLLECT',payload:bag}) 
   };
 
   if (hasPermission === null) {
@@ -59,6 +62,8 @@ function ScannBagsCollectinScreen() {
         <BarcodeMask edgeColor="#62B1F6" showAnimatedLine />
       </BarCodeScanner>
        {scanned ? <Button title={'Aprieta para escanear devuelta!'} onPress={handleScaned} /> : null} 
+
+
      
     </View>
   );
