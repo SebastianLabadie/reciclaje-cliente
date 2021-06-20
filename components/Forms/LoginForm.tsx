@@ -6,91 +6,90 @@ import { StyleSheet, Text, TouchableWithoutFeedback,Animated } from "react-nativ
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 
 import { useDispatch } from "react-redux";
-import { View } from "../components/Themed";
-import KeyboardWithDissmis from "../components/KeyboardWithDissmis/KeyboardWithDissmis";
-import Colors from "../constants/Colors";
-import WaveBG from "../components/WaveBG/WaveBG";
-import { Image } from "react-native";
+import Colors from "../../constants/Colors";
 
-export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [hidePass, setHidePass] = useState(true);
-  const dispatch = useDispatch();
-
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const translateXAnim = useRef(new Animated.Value(300)).current;
-  const translateYPlusAnim = useRef(new Animated.Value(-300)).current;
-  const translateYMinusAnim = useRef(new Animated.Value(300)).current;
-
-  const fadeIn = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true 
-    }).start();
-  };
-
-  const translateXIn = () => {
-    Animated.timing(translateXAnim, {
-      toValue: 0,
-      duration: 1500,
-      useNativeDriver: true 
-    }).start();
-  };
-
-  const translateYPlusIn = () => {
-    Animated.timing(translateYPlusAnim, {
-      toValue: 0,
-      duration: 1500,
-      useNativeDriver: true 
-    }).start();
-  };
-
-  const translateYMiunsIn = () => {
-    Animated.timing(translateYMinusAnim, {
-      toValue: 0,
-      duration: 1500,
-      useNativeDriver: true 
-    }).start();
-  };
-
-  const startAnimations = ()=>{
-    fadeIn()
-    translateXIn()
-    translateYPlusIn()
-    translateYMiunsIn()
-  }
-
-  useEffect(() => {
-    startAnimations()
-  }, [])
-
-  const handleLogin = async () => {
-    console.log(email, password);
-
-    const res = true;
-    //const res = axios.post('','')
-
-    if (res) {
-      try {
-        await AsyncStorage.setItem(
-          "isLoged",
-          JSON.stringify({ isLoged: true })
-        );
-        dispatch({ type: "SET_USER_STATE", payload: true });
-      } catch (e) {
-        console.log("error ");
-      }
+function LoginForm() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [hidePass, setHidePass] = useState(true);
+    const dispatch = useDispatch();
+  
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const translateXAnim = useRef(new Animated.Value(300)).current;
+    const translateYPlusAnim = useRef(new Animated.Value(-300)).current;
+    const translateYMinusAnim = useRef(new Animated.Value(300)).current;
+  
+    const fadeIn = () => {
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true 
+      }).start();
+    };
+  
+    const translateXIn = () => {
+      Animated.timing(translateXAnim, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true 
+      }).start();
+    };
+  
+    const translateYPlusIn = () => {
+      Animated.timing(translateYPlusAnim, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true 
+      }).start();
+    };
+  
+    const translateYMiunsIn = () => {
+      Animated.timing(translateYMinusAnim, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true 
+      }).start();
+    };
+  
+    const startAnimations = ()=>{
+      fadeIn()
+      translateXIn()
+      translateYPlusIn()
+      translateYMiunsIn()
     }
-  };
+  
+    useEffect(() => {
+      startAnimations()
+    }, [])
+  
+    const handleLogin = async () => {
+      console.log(email, password);
+  
+      const res = true;
+      //const res = axios.post('','')
+  
+      if (res) {
+        try {
+          await AsyncStorage.setItem(
+            "isLoged",
+            JSON.stringify({ isLoged: true })
+          );
+          dispatch({ type: "SET_USER_STATE", payload: true });
+        } catch (e) {
+          console.log("error ");
+        }
+      }else{
+        alert("Error, usuario/contraseña invalidos")
+      }
+    };
+  
+    const handleRegister = ()=> {
+        dispatch({type:'SET_CURRENT_AUTH',payload:'register'})
+    }
 
-  return (
-    <KeyboardWithDissmis>
-      <View style={styles.screen}>
-        <WaveBG title='¡Por un mundo Mejor!' /> 
+    return (
         <Animated.View style={[styles.loginFormContainer, { opacity: fadeAnim}]}>
-          <Animated.Image source={require('../assets/images/LogoReciclaje.png')} style={[styles.logo,{transform:[{translateY:translateYPlusAnim}]}]} />
+          <Animated.Image source={require('../../assets/images/LogoReciclaje.png')} style={[styles.logo,{transform:[{translateY:translateYPlusAnim}]}]} />
           <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
             <TextInput
               style={styles.inputText}
@@ -125,21 +124,17 @@ export default function LoginScreen() {
             <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
               <Text style={styles.loginText}>Iniciar Sesion</Text>
             </TouchableOpacity>
+            <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
+              <Text style={styles.loginText}>Registrarse</Text>
+            </TouchableOpacity>
           </Animated.View>
-        
         </Animated.View>
-      </View>
-    </KeyboardWithDissmis>
-  );
+    )
 }
 
+
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    position: "relative",
-    backgroundColor: Colors.light.background,
-  },
-  loginFormContainer: {
+    loginFormContainer: {
     position: "absolute",
     width:'100%',
     top: 300,
@@ -151,6 +146,7 @@ const styles = StyleSheet.create({
     width:150,
     height:160,
     marginBottom: 30,
+    zIndex:0
   },
   inputView: {
     width: "80%",
@@ -189,6 +185,7 @@ const styles = StyleSheet.create({
   forgot: {
     color: Colors.light.text,
     fontSize: 12,
+    marginBottom:40
   },
   loginBtn: {
     backgroundColor: Colors.primary,
@@ -196,12 +193,13 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
     marginBottom: 10,
     paddingVertical:15,
-    paddingHorizontal:40
+    paddingHorizontal:40,
+    minWidth:175
   },
   loginText: {
     color: Colors.light.text,
   },
-});
+})
+export default LoginForm

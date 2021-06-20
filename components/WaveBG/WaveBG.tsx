@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
   viewAbove: {
     backgroundColor: "#6DFF6E",
     height: 200,
-    alignItems:'center'
+    alignItems:'center',
+    zIndex:10,
   },
   title:{
     position:'absolute',
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
   svg: {
     position: "absolute",
     top: 190,
+    zIndex:10,
   },
 });
 export default WaveBG;

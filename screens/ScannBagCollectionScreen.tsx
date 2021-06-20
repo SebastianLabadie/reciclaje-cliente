@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Button, Vibration } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import BarcodeMask from "react-native-barcode-mask";
-import ModalTel from "../components/Modal/ModalTel";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/core";
 import { useDispatch } from "react-redux";
@@ -10,7 +9,6 @@ import { useDispatch } from "react-redux";
 function ScannBagsCollectinScreen() {
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
   const [data, setData] = useState("");
   const [type, setType] = useState("");
   const dispatch = useDispatch()
@@ -36,7 +34,6 @@ function ScannBagsCollectinScreen() {
     setScanned(true);
     setData(data);
     setType(type);
-    setModalVisible(true);
     alert(`Este es el tipo ${type} este es la data: ${data}`)
     const bag = JSON.parse(data)
     dispatch({type:'ADD_BAG_TO_COLLECT',payload:bag}) 
@@ -50,7 +47,6 @@ function ScannBagsCollectinScreen() {
   }
 
   const handleScaned = () => {
-    setModalVisible(false);
     setScanned(false);
   };
   return (

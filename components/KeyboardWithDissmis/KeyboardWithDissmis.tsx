@@ -7,6 +7,7 @@ function KeyboardWithDissmis({ children }: any) {
       onPress={() => {
         Keyboard.dismiss();
       }}
+
     >
       {children}
     </TouchableWithoutFeedback>

@@ -10,7 +10,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import SidebarMenu from './SidebarMenu';
 import { Feather, FontAwesome, MaterialCommunityIcons,SimpleLineIcons,FontAwesome5,Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import LoginScreen from '../screens/LoginScreen';
+import AuthScreen from '../screens/AuthScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import SignoutScreen from '../screens/SignoutScreen';
@@ -264,7 +264,7 @@ export  function DrawerNavigatorTabs() {
         <Drawer.Screen
         name="Login"
         options={{ drawerLabel: 'Iniciar Sesion',  drawerIcon: (tabinfo) => <MaterialCommunityIcons name="login" size={24} color={tabinfo.color} />}}
-        component={LoginScreen}
+        component={AuthScreen}
         />
         :
         <>
