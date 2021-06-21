@@ -75,16 +75,16 @@ export default function ModalRegistrationAddress({
 
 
   const handleConfirm = async () => {
-    try {
+    dispatch({type:'SET_REGISTER_GEOLOCATION',payload:`${coords.latitude},${coords.longitude}`})
+    setModalVisible(false)
+    /* try {
       const res = await axios.get(`https://us1.locationiq.com/v1/reverse.php?key=pk.80b5094cd9229a093d5caa600faaa573&lat=${coords.latitude}&lon=${coords.longitude}&format=json`)
       console.log('res: ',res.data)
-      dispatch({type:'SET_REGISTER_ADDRESS',payload:`${res.data.address.state},${res.data.address.city},${res.data.address.road},${res.data.address.house_number}`})
-      setModalVisible(false)
     } catch (error) {
       console.log('peticion: ',`https://us1.locationiq.com/v1/reverse.php?key=pk.80b5094cd9229a093d5caa600faaa573&lat=${coords.latitude}&lon=${coords.longitude}&format=json`)
       console.log('error: ',error)
     }
-     
+     */ 
   };
 
   return (

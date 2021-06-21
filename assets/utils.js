@@ -102,3 +102,7 @@ export const getOrdenGen = (Gen) => {
 
   return res;
 };
+
+export const splice = function(idx, rem, str) {
+  return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
+};

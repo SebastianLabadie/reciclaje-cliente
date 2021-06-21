@@ -8,14 +8,23 @@ import ModalRegistrationAddress from "../Modal/ModalRegistrationAddress";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "../../constants/Colors";
 
+const splice = function(idx:number, rem:number,mys:string, str:string) {
+  return mys.slice(0, idx) + str + mys.slice(idx + Math.abs(rem));
+};
+
 
 function RegistrationForm() {
+    const [ci, setCI] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [fullName, setFullName] = useState("");
     const [phone, setPhone] = useState("");
+    const [address, setAddress] = useState("");
+    const [localidad, setLocalidad] = useState("");
+    const [padron, setPadron] = useState("");
+    const [municipalCode, setMunicipalCode] = useState("");
     //@ts-ignore
-    const address = useSelector(state=>state.auth.registerAddress);
+    const geoLocation = useSelector(state=>state.auth.registerGeolocation);
     const [hidePass, setHidePass] = useState(true);
     const [modalVisible,setModalVisible] = useState(false)
     const dispatch = useDispatch();
@@ -23,7 +32,6 @@ function RegistrationForm() {
   
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const translateXAnim = useRef(new Animated.Value(300)).current;
-    const translateYPlusAnim = useRef(new Animated.Value(-300)).current;
     const translateYMinusAnim = useRef(new Animated.Value(300)).current;
   
     const fadeIn = () => {
@@ -42,14 +50,6 @@ function RegistrationForm() {
       }).start();
     };
   
-    const translateYPlusIn = () => {
-      Animated.timing(translateYPlusAnim, {
-        toValue: 0,
-        duration: 1000,
-        useNativeDriver: true 
-      }).start();
-    };
-  
     const translateYMiunsIn = () => {
       Animated.timing(translateYMinusAnim, {
         toValue: 0,
@@ -61,7 +61,6 @@ function RegistrationForm() {
     const startAnimations = ()=>{
       fadeIn()
       translateXIn()
-      translateYPlusIn()
       translateYMiunsIn()
     }
   
@@ -74,12 +73,48 @@ function RegistrationForm() {
     };
   
     const handleRegister = async ()=>{
-
+      const cliente = {
+        Usuario:ci,
+        Password:password,
+        Empresa:23,
+        ClienteNom:fullName.split(" ")[0],
+        ClienteApe:fullName.split(" ")[1],
+        ClienteCI:splice(-1,0,ci,"-"),
+        ClienteFchNac:"2001-06-03",
+        ClienteCel:phone,
+        ClienteEmail:email,
+        CliCalUbicacion:address,
+        Latitud:geoLocation.split(",")[0],
+        Longitud:geoLocation.split(",")[1],
+        Padron:padron,
+        codMunicipal:municipalCode,
+        Localidad:localidad
+      }
+ 
+      try {
+        const res = await axios.post('http://1.1.9.119:8080/SIGA-WS-TEMP/rest/wsClienteIngresar_rest',cliente)
+        console.log('res: ',res.data)
+      } catch (error) {
+          console.log("error: ",error)
+      }
     }
+
+   
 
     return (
         <ScrollView style={{backgroundColor:Colors.light.background}}>
           <Animated.View style={[styles.loginFormContainer, { opacity: fadeAnim}]}>
+            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+              <TextInput
+                style={styles.inputText}
+                placeholder="Cédula"
+                placeholderTextColor="#EFEFEF"
+                onChangeText={(text) => setCI(text)
+                }
+                keyboardType="numeric"
+                maxLength = {8}
+              />
+            </Animated.View>
             <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
               <TextInput
                 style={styles.inputText}
@@ -96,12 +131,47 @@ function RegistrationForm() {
                 onChangeText={(text) => setPhone(text)
                 }
                 keyboardType="numeric"
+                maxLength={9}
+              />
+            </Animated.View>
+            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+              <TextInput
+                style={styles.inputText}
+                placeholder="Dirección"
+                placeholderTextColor="#EFEFEF"
+                onChangeText={(text) => setAddress(text)}
               />
             </Animated.View>
             <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}  >
               <TouchableWithoutFeedback onPress={() => setModalVisible(!modalVisible)}>
-                  <Text  style={styles.txtInputText}> {address ? address : 'Direccion'} </Text>
+                  <Text  style={styles.txtInputText}> {geoLocation ? geoLocation : 'Geoposicion'} </Text>
               </TouchableWithoutFeedback>
+            </Animated.View>
+            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+              <TextInput
+                style={styles.inputText}
+                placeholder="Localidad"
+                placeholderTextColor="#EFEFEF"
+                onChangeText={(text) => setLocalidad(text)}
+              />
+            </Animated.View>
+            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+              <TextInput
+                style={styles.inputText}
+                placeholder="Padron"
+                placeholderTextColor="#EFEFEF"
+                onChangeText={(text) => setPadron(text)}
+                keyboardType="numeric"
+              />
+            </Animated.View>
+            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+              <TextInput
+                style={styles.inputText}
+                placeholder="Código Municipal"
+                placeholderTextColor="#EFEFEF"
+                keyboardType="numeric"
+                onChangeText={(text) => setMunicipalCode(text)}
+              />
             </Animated.View>
             <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
               <TextInput
