@@ -236,6 +236,7 @@ function CollectionPointsScreenStack({ navigation }:any) {
 
 export  function DrawerNavigatorTabs() {
   let isLoged
+  //@ts-ignore
   const userLoged = useSelector(state => state.auth.userLoged)
   const dispatch = useDispatch()
 
@@ -261,11 +262,11 @@ export  function DrawerNavigatorTabs() {
         drawerContent={(props) => <SidebarMenu {...props} />}>
 
         {userLoged === false ? 
-        <Drawer.Screen
-        name="Login"
-        options={{ drawerLabel: 'Iniciar Sesion',  drawerIcon: (tabinfo) => <MaterialCommunityIcons name="login" size={24} color={tabinfo.color} />}}
-        component={AuthScreen}
-        />
+          <Drawer.Screen
+          name="Login"
+          options={{ drawerLabel: 'Iniciar Sesion',  drawerIcon: (tabinfo) => <MaterialCommunityIcons name="login" size={24} color={tabinfo.color} />}}
+          component={AuthScreen}
+          />
         :
         <>
           <Drawer.Screen
@@ -282,11 +283,6 @@ export  function DrawerNavigatorTabs() {
           name="RequestBags"
           options={{ drawerLabel: 'Solicitar Bolsas',  drawerIcon: (tabinfo) => <SimpleLineIcons name="bag" size={24} color={tabinfo.color} /> }}
           component={RequestBagsScreenStack}
-          />
-           <Drawer.Screen
-          name="CollectionPoints"
-          options={{ drawerLabel: 'Puntos de Reciclaje',  drawerIcon: (tabinfo) => <Ionicons name="location-sharp" size={24} color={tabinfo.color} /> }}
-          component={CollectionPointsScreenStack}
           />
           <Drawer.Screen
           name="Signout"

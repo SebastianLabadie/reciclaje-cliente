@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import Colors from "../../constants/Colors";
 
 function LoginForm() {
-    const [email, setEmail] = useState("");
+    const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [hidePass, setHidePass] = useState(true);
     const dispatch = useDispatch();
@@ -61,14 +61,23 @@ function LoginForm() {
     useEffect(() => {
       startAnimations()
     }, [])
+
+    const resetFields = ()=>{
+      setUser("")
+      setPassword("")
+    }
   
     const handleLogin = async () => {
-      console.log(email, password);
+      const login ={
+        Usuario:user,
+        Password:"1234"
+      }
+      const res = await axios.post('http://1.1.9.119:8080/SIGA-WS-TEMP/rest/wsLoginTrigenusCliente',login)
   
-      const res = true;
-      //const res = axios.post('','')
-  
-      if (res) {
+      //@ts-ignore
+      if (res.data.isOk) {
+        resetFields()
+
         try {
           await AsyncStorage.setItem(
             "isLoged",
@@ -93,9 +102,9 @@ function LoginForm() {
           <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
             <TextInput
               style={styles.inputText}
-              placeholder="Email..."
+              placeholder="CI..."
               placeholderTextColor="#EFEFEF"
-              onChangeText={(text) => setEmail(text)}
+              onChangeText={(text) => setUser(text)}
             />
           </Animated.View>
           <Animated.View style={[styles.inputViewPassword,{transform:[{translateX:translateXAnim}]}]} >

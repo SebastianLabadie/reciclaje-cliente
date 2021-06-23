@@ -2,7 +2,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity,Animated,TouchableWithoutFeedback, ScrollView,View, Keyboard } from "react-native";
+import { StyleSheet, Text, TouchableOpacity,Animated,TouchableWithoutFeedback, ScrollView,View, Keyboard, Alert } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import ModalRegistrationAddress from "../Modal/ModalRegistrationAddress";
 import { useDispatch, useSelector } from "react-redux";
@@ -93,7 +93,12 @@ function RegistrationForm() {
  
       try {
         const res = await axios.post('http://1.1.9.119:8080/SIGA-WS-TEMP/rest/wsClienteIngresar_rest',cliente)
-        console.log('res: ',res.data)
+        
+        if (res.data.CodigoRet == 2000) {
+            alert("Registrado con exito.")
+        }else{
+            alert("Hubo un problema con los datos enviados.")
+        }
       } catch (error) {
           console.log("error: ",error)
       }
