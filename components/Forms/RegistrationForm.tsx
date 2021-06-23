@@ -7,6 +7,8 @@ import { TextInput } from "react-native-gesture-handler";
 import ModalRegistrationAddress from "../Modal/ModalRegistrationAddress";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "../../constants/Colors";
+import {Picker} from '@react-native-picker/picker';
+import { Dimensions } from "react-native";
 
 const splice = function(idx:number, rem:number,mys:string, str:string) {
   return mys.slice(0, idx) + str + mys.slice(idx + Math.abs(rem));
@@ -25,6 +27,7 @@ function RegistrationForm() {
     const [municipalCode, setMunicipalCode] = useState("");
     //@ts-ignore
     const geoLocation = useSelector(state=>state.auth.registerGeolocation);
+    const [selectedLanguage, setSelectedLanguage] = useState(0);
     const [hidePass, setHidePass] = useState(true);
     const [modalVisible,setModalVisible] = useState(false)
     const dispatch = useDispatch();
@@ -105,7 +108,6 @@ function RegistrationForm() {
     }
 
    
-
     return (
         <ScrollView style={{backgroundColor:Colors.light.background}}>
           <Animated.View style={[styles.loginFormContainer, { opacity: fadeAnim}]}>
@@ -139,6 +141,20 @@ function RegistrationForm() {
                 maxLength={9}
               />
             </Animated.View>
+            <View  style={{width:'80%',alignContent:'center',alignSelf:'center',backgroundColor: "#465881",marginBottom:20,borderRadius:30}}>
+              <Picker
+                mode="dialog"
+                selectedValue={selectedLanguage}
+                onValueChange={(v) => setSelectedLanguage(v)}
+               /*  prompt="Cantidad de personas" */
+               style={{marginLeft:10,color:'white'}}
+               dropdownIconColor={'white'}
+                >
+                <Picker.Item label="Cantidad de personas en hogar" value={0} />
+                <Picker.Item label="1" value={1} />
+                <Picker.Item label="2" value={2}/>
+              </Picker>
+            </View>
             <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
               <TextInput
                 style={styles.inputText}
@@ -178,6 +194,7 @@ function RegistrationForm() {
                 onChangeText={(text) => setMunicipalCode(text)}
               />
             </Animated.View>
+           
             <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
               <TextInput
                 style={styles.inputText}
@@ -226,7 +243,7 @@ function RegistrationForm() {
 
 const styles = StyleSheet.create({
   loginFormContainer: {
-    width:'100%',
+    width:Dimensions.get('window').width,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.light.background,
