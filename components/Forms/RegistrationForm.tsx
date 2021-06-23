@@ -25,12 +25,18 @@ function RegistrationForm() {
     const [localidad, setLocalidad] = useState("");
     const [padron, setPadron] = useState("");
     const [municipalCode, setMunicipalCode] = useState("");
+    const [people, setPeople] = useState(0);
     //@ts-ignore
     const geoLocation = useSelector(state=>state.auth.registerGeolocation);
-    const [selectedLanguage, setSelectedLanguage] = useState(0);
     const [hidePass, setHidePass] = useState(true);
     const [modalVisible,setModalVisible] = useState(false)
     const dispatch = useDispatch();
+
+    const [age1, setAge1] = useState(0);
+    const [age2, setAge2] = useState(0);
+    const [age3, setAge3] = useState(0);
+    const [age4, setAge4] = useState(0);
+    const [age5, setAge5] = useState(0);
 
   
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -107,6 +113,15 @@ function RegistrationForm() {
       }
     }
 
+    const cantOfInputs = () =>{
+      let txt= []
+      for (let i = 0; i < people; i++) {
+
+        
+      }
+      return txt
+    }
+
    
     return (
         <ScrollView style={{backgroundColor:Colors.light.background}}>
@@ -141,11 +156,11 @@ function RegistrationForm() {
                 maxLength={9}
               />
             </Animated.View>
-            <View  style={{width:'80%',alignContent:'center',alignSelf:'center',backgroundColor: "#465881",marginBottom:20,borderRadius:30}}>
+            <Animated.View style={[styles.pickerPeople,{transform:[{translateX:translateXAnim}]}]} >
               <Picker
                 mode="dialog"
-                selectedValue={selectedLanguage}
-                onValueChange={(v) => setSelectedLanguage(v)}
+                selectedValue={people}
+                onValueChange={(v) => setPeople(v)}
                /*  prompt="Cantidad de personas" */
                style={{marginLeft:10,color:'white'}}
                dropdownIconColor={'white'}
@@ -154,7 +169,8 @@ function RegistrationForm() {
                 <Picker.Item label="1" value={1} />
                 <Picker.Item label="2" value={2}/>
               </Picker>
-            </View>
+            </Animated.View>
+            {cantOfInputs()}
             <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
               <TextInput
                 style={styles.inputText}
@@ -257,6 +273,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     justifyContent: "center",
     padding: 20,
+  },
+  pickerPeople:{width:'80%',
+    alignContent:'center',
+    alignSelf:'center',
+    backgroundColor: "#465881",
+    marginBottom:20,
+    borderRadius:25
   },
   inputViewPassword: {
     flexDirection: "row",
