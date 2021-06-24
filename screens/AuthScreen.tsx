@@ -16,7 +16,7 @@ export default function AuthScreen() {
   return (
     <KeyboardWithDissmis>
       <View  style={styles.screen}>
-        <WaveBG title="¡Por un mundo Mejor!" />
+        {currentAuth === "login" ?  <WaveBG title="¡Por un mundo Mejor!" /> : null}
         {currentAuth === "login" ? <LoginForm /> : <RegistrationForm />}
       </View>
     </KeyboardWithDissmis>

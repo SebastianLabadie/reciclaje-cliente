@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Colors from "../../constants/Colors";
 import {Picker} from '@react-native-picker/picker';
 import { Dimensions } from "react-native";
+//@ts-ignore
+import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 
 const splice = function(idx:number, rem:number,mys:string, str:string) {
   return mys.slice(0, idx) + str + mys.slice(idx + Math.abs(rem));
@@ -26,17 +28,18 @@ function RegistrationForm() {
     const [padron, setPadron] = useState("");
     const [municipalCode, setMunicipalCode] = useState("");
     const [people, setPeople] = useState(0);
+    const [step, setStep] = useState(1);
     //@ts-ignore
     const geoLocation = useSelector(state=>state.auth.registerGeolocation);
     const [hidePass, setHidePass] = useState(true);
     const [modalVisible,setModalVisible] = useState(false)
     const dispatch = useDispatch();
 
-    const [age1, setAge1] = useState(0);
-    const [age2, setAge2] = useState(0);
-    const [age3, setAge3] = useState(0);
-    const [age4, setAge4] = useState(0);
-    const [age5, setAge5] = useState(0);
+    const [age1, setAge1] = useState("");
+    const [age2, setAge2] = useState("");
+    const [age3, setAge3] = useState("");
+    const [age4, setAge4] = useState("");
+    const [age5, setAge5] = useState("");
 
   
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -82,6 +85,11 @@ function RegistrationForm() {
     };
   
     const handleRegister = async ()=>{
+      const edades = []
+      {people >= 1 ? edades.push(age1) : null }
+      {people >= 2 ? edades.push(age2) : null }
+      {people >= 3 ? edades.push(age3) : null }
+      {people >= 4 ? edades.push(age4) : null }
       const cliente = {
         Usuario:ci,
         Password:password,
@@ -95,6 +103,10 @@ function RegistrationForm() {
         CliCalUbicacion:address,
         Latitud:geoLocation.split(",")[0],
         Longitud:geoLocation.split(",")[1],
+        SDTPersonasEnHogar:{
+          CantidadDePersonasEnH:people,
+          Edades:[...edades]
+        },
         Padron:padron,
         codMunicipal:municipalCode,
         Localidad:localidad
@@ -113,138 +125,226 @@ function RegistrationForm() {
       }
     }
 
-    const cantOfInputs = () =>{
-      let txt= []
-      for (let i = 0; i < people; i++) {
-
-        
-      }
-      return txt
+    const progressOnNext  = () =>{
+      setStep(step+1)
     }
 
+    const progressOnPrev  = () =>{
+      setStep(step-1)
+    }
    
     return (
-        <ScrollView style={{backgroundColor:Colors.light.background}}>
-          <Animated.View style={[styles.loginFormContainer, { opacity: fadeAnim}]}>
-            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Cédula"
-                placeholderTextColor="#EFEFEF"
-                onChangeText={(text) => setCI(text)
-                }
-                keyboardType="numeric"
-                maxLength = {8}
-              />
-            </Animated.View>
-            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Nombre y Apellido"
-                placeholderTextColor="#EFEFEF"
-                onChangeText={(text) => setFullName(text)}
-              />
-            </Animated.View>
-            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Telefono"
-                placeholderTextColor="#EFEFEF"
-                onChangeText={(text) => setPhone(text)
-                }
-                keyboardType="numeric"
-                maxLength={9}
-              />
-            </Animated.View>
-            <Animated.View style={[styles.pickerPeople,{transform:[{translateX:translateXAnim}]}]} >
-              <Picker
-                mode="dialog"
-                selectedValue={people}
-                onValueChange={(v) => setPeople(v)}
-               /*  prompt="Cantidad de personas" */
-               style={{marginLeft:10,color:'white'}}
-               dropdownIconColor={'white'}
-                >
-                <Picker.Item label="Cantidad de personas en hogar" value={0} />
-                <Picker.Item label="1" value={1} />
-                <Picker.Item label="2" value={2}/>
-              </Picker>
-            </Animated.View>
-            {cantOfInputs()}
-            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Dirección"
-                placeholderTextColor="#EFEFEF"
-                onChangeText={(text) => setAddress(text)}
-              />
-            </Animated.View>
-            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}  >
-              <TouchableWithoutFeedback onPress={() => setModalVisible(!modalVisible)}>
-                  <Text  style={styles.txtInputText}> {geoLocation ? geoLocation : 'Geoposicion'} </Text>
-              </TouchableWithoutFeedback>
-            </Animated.View>
-            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Localidad"
-                placeholderTextColor="#EFEFEF"
-                onChangeText={(text) => setLocalidad(text)}
-              />
-            </Animated.View>
-            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Padron"
-                placeholderTextColor="#EFEFEF"
-                onChangeText={(text) => setPadron(text)}
-                keyboardType="numeric"
-              />
-            </Animated.View>
-            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Código Municipal"
-                placeholderTextColor="#EFEFEF"
-                keyboardType="numeric"
-                onChangeText={(text) => setMunicipalCode(text)}
-              />
-            </Animated.View>
-           
-            <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Email..."
-                placeholderTextColor="#EFEFEF"
-                onChangeText={(text) => setEmail(text)}
-              />
-            </Animated.View>
-            <Animated.View style={[styles.inputViewPassword,{transform:[{translateX:translateXAnim}]}]} >
-              <TextInput
-                secureTextEntry={hidePass}
-                style={styles.inputTextPassword}
-                placeholder="Password..."
-                placeholderTextColor="#EFEFEF"
-                onChangeText={(text) => setPassword(text)}
-              />
-              <TouchableWithoutFeedback
-                style={{ backgroundColor: "transparent", padding: 10 }}
-                onPress={() => setHidePass(!hidePass)}
-              >
-                <FontAwesome5
-                  name={hidePass ? "eye-slash" : "eye"}
-                  size={18}
-                  color="#EFEFEF"
-                />
-              </TouchableWithoutFeedback>
-            </Animated.View>
+
+        <ScrollView style={{backgroundColor:Colors.light.background,flex:1,paddingTop:20}}>
+          <ProgressSteps >
+              <ProgressStep label="Datos Personales" nextBtnText='Siguiente' onPrevious={progressOnPrev} onNext={progressOnNext} nextBtnTextStyle={styles.btnStep} previousBtnTextStyle={styles.btnStep}>
+                <Animated.View style={[styles.formContainer, { opacity: fadeAnim}]}>
+                  <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                    <TextInput
+                      style={styles.inputText}
+                      placeholder="Cédula"
+                      placeholderTextColor="#EFEFEF"
+                      onChangeText={(text) => setCI(text)
+                      }
+                      value={ci}
+                      keyboardType="numeric"
+                      maxLength = {8}
+                    />
+                  </Animated.View>
+                  <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                    <TextInput
+                      style={styles.inputText}
+                      placeholder="Nombre y Apellido"
+                      placeholderTextColor="#EFEFEF"
+                      onChangeText={(text) => setFullName(text)}
+                      value={fullName}
+                    />
+                  </Animated.View>
+                  <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                    <TextInput
+                      style={styles.inputText}
+                      placeholder="Telefono"
+                      placeholderTextColor="#EFEFEF"
+                      onChangeText={(text) => setPhone(text)
+                      }
+                      keyboardType="numeric"
+                      maxLength={9}
+                      value={phone}
+                    />
+                  </Animated.View>
+                  <Animated.View style={[styles.pickerPeople,{transform:[{translateX:translateXAnim}]}]} >
+                      <Picker
+                        mode="dialog"
+                        selectedValue={people}
+                        onValueChange={(v) => setPeople(v)}
+                        /*  prompt="Cantidad de personas" */
+                        style={{marginLeft:10,color:'white'}}
+                        dropdownIconColor={'white'}
+                      >
+                      <Picker.Item label="Cantidad de personas en hogar" value={0} />
+                      <Picker.Item label="1" value={1} />
+                      <Picker.Item label="2" value={2}/>
+                      <Picker.Item label="3" value={3}/>
+                      <Picker.Item label="4" value={4}/>
+                    </Picker>
+                  </Animated.View>
+
+                  {/* EDADES */}
+                  {people >= 1 ? (
+                    <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                      <TextInput
+                        style={styles.inputText}
+                        placeholder="Edad1"
+                        placeholderTextColor="#EFEFEF"
+                        onChangeText={(text) => setAge1(text)
+                        }
+                        keyboardType="numeric"
+                        maxLength={3}
+                        value={age1}
+                      />
+                  </Animated.View>
+                  ) : null } 
+                 {people >= 2 ? (
+                    <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                      <TextInput
+                        style={styles.inputText}
+                        placeholder="Edad2"
+                        placeholderTextColor="#EFEFEF"
+                        onChangeText={(text) => setAge2(text)
+                        }
+                        keyboardType="numeric"
+                        maxLength={3}
+                        value={age2}
+                      />
+                  </Animated.View>
+                  ) : null }
+                  {people >= 3 ? (
+                    <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                      <TextInput
+                        style={styles.inputText}
+                        placeholder="Edad3"
+                        placeholderTextColor="#EFEFEF"
+                        onChangeText={(text) => setAge3(text)
+                        }
+                        keyboardType="numeric"
+                        maxLength={3}
+                        value={age3}
+                      />
+                  </Animated.View>
+                  ) : null }
+                  {people >= 4 ? (
+                    <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                      <TextInput
+                        style={styles.inputText}
+                        placeholder="Edad4"
+                        placeholderTextColor="#EFEFEF"
+                        onChangeText={(text) => setAge4(text)
+                        }
+                        keyboardType="numeric"
+                        maxLength={3}
+                        value={age4}
+                      />
+                  </Animated.View>
+                  ) : null }
+                  
+                  
+                </Animated.View>
+              </ProgressStep>
+              <ProgressStep label="Direccion" previousBtnText='Anterior' nextBtnText='Siguiente' onPrevious={progressOnPrev} onNext={progressOnNext} nextBtnTextStyle={styles.btnStep} previousBtnTextStyle={styles.btnStep}>
+                <Animated.View style={[styles.formContainer, { opacity: fadeAnim}]}>
+                    <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                    <TextInput
+                      style={styles.inputText}
+                      placeholder="Dirección"
+                      placeholderTextColor="#EFEFEF"
+                      onChangeText={(text) => setAddress(text)}
+                      autoCapitalize = 'none'
+                      value={address}
+                    />
+                  </Animated.View>
+                  <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}  >
+                    <TouchableWithoutFeedback onPress={() => setModalVisible(!modalVisible)}>
+                        <Text  style={styles.txtInputText}> {geoLocation ? geoLocation : 'Geoposicion'} </Text>
+                    </TouchableWithoutFeedback>
+                  </Animated.View>
+                  <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                    <TextInput
+                      style={styles.inputText}
+                      placeholder="Localidad"
+                      placeholderTextColor="#EFEFEF"
+                      onChangeText={(text) => setLocalidad(text)}
+                      value={localidad}
+                      autoCapitalize = 'none'
+                    />
+                  </Animated.View>
+                  <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                    <TextInput
+                      style={styles.inputText}
+                      placeholder="Padron"
+                      placeholderTextColor="#EFEFEF"
+                      onChangeText={(text) => setPadron(text)}
+                      keyboardType="numeric"
+                      value={padron}
+                    />
+                  </Animated.View>
+                  <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                    <TextInput
+                      style={styles.inputText}
+                      placeholder="Código Municipal"
+                      placeholderTextColor="#EFEFEF"
+                      keyboardType="numeric"
+                      onChangeText={(text) => setMunicipalCode(text)}
+                      value={municipalCode}
+                    />
+                  </Animated.View>
+                </Animated.View>
+              </ProgressStep>
+              <ProgressStep label="Datos De cuenta"  previousBtnText='Anterior' finishBtnText=''  onPrevious={progressOnPrev}  previousBtnTextStyle={styles.btnStep}>
+                <Animated.View style={[styles.formContainer, { opacity: fadeAnim}]}>
+                    
+                  <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
+                    <TextInput
+                      style={styles.inputText}
+                      placeholder="Email..."
+                      placeholderTextColor="#EFEFEF"
+                      onChangeText={(text) => setEmail(text)}
+                      value={email}
+                      autoCapitalize = 'none'
+                    />
+                  </Animated.View>
+                  <Animated.View style={[styles.inputViewPassword,{transform:[{translateX:translateXAnim}]}]} >
+                    <TextInput
+                      secureTextEntry={hidePass}
+                      style={styles.inputTextPassword}
+                      placeholder="Password..."
+                      placeholderTextColor="#EFEFEF"
+                      onChangeText={(text) => setPassword(text)}
+                      value={password}
+                      autoCapitalize = 'none'
+                    />
+                    <TouchableWithoutFeedback
+                      style={{ backgroundColor: "transparent", padding: 10 }}
+                      onPress={() => setHidePass(!hidePass)}
+                    >
+                      <FontAwesome5
+                        name={hidePass ? "eye-slash" : "eye"}
+                        size={18}
+                        color="#EFEFEF"
+                      />
+                    </TouchableWithoutFeedback>
+                  </Animated.View>
+                </Animated.View>
+              </ProgressStep>
+          </ProgressSteps>
+
+          <Animated.View style={[styles.authBtnsContainer, { opacity: fadeAnim}]}>
             <Animated.View style={[styles.btnsContainer,{transform:[{translateY:translateYMinusAnim}]}]}>
               <TouchableOpacity>
                 <Text style={styles.forgot}>Olvidaste la contraseña?</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
+              {step == 3 ?  <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
                 <Text style={styles.loginText}>Registrarse</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> : null}
               <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
                 <Text style={styles.loginText}>Iniciar Sesion</Text>
               </TouchableOpacity>
@@ -252,18 +352,21 @@ function RegistrationForm() {
           </Animated.View>
 
           <ModalRegistrationAddress modalVisible={modalVisible} setModalVisible={setModalVisible} />
+
         </ScrollView>
+    
     )
 }
 
 
 const styles = StyleSheet.create({
-  loginFormContainer: {
+  formContainer: {
     width:Dimensions.get('window').width,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.light.background,
-    marginTop:100,
+    marginTop:10,
+    /* marginBottom:10, */
   },
   inputView: {
     width: "80%",
@@ -309,7 +412,13 @@ const styles = StyleSheet.create({
   forgot: {
     color: Colors.light.text,
     fontSize: 12,
-    marginBottom:40,
+    marginBottom:30,
+  },
+  authBtnsContainer:{
+    width:Dimensions.get('window').width,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.light.background,
   },
   loginBtn: {
     backgroundColor: Colors.primary,
@@ -327,6 +436,19 @@ const styles = StyleSheet.create({
   },
   txtInputText:{
     color:'white'
+  },
+  btnStep:{
+    fontSize:16,
+    
+  },
+  btnStepNext:{
+    backgroundColor: Colors.primary, 
+    borderRadius: 35,
+    paddingVertical:12,
+    paddingHorizontal:40,
+    fontSize:14,
+    color:'#000',
+    
   },
 })
 export default RegistrationForm

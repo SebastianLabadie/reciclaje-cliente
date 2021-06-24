@@ -1,11 +1,12 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text,Image } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import Colors from "../../constants/Colors";
 function WaveBG({title}:any) {
   return (
     <View>
       <View style={styles.viewAbove} >
+        <Image style={styles.logoTrigenus} source={require('../../assets/images/logoTrigenus.png')} />
         <Text style={styles.title}>{title}</Text>
       </View>
       <Svg height="50%" width="100%" viewBox="0 0 1440 320" style={styles.svg}>
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   },
   title:{
     position:'absolute',
-    bottom:50,
+    bottom:20,
     fontSize:22,
     color:'white',
     fontWeight:'bold'
@@ -37,6 +38,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 190,
     zIndex:10,
+  },
+  logoTrigenus:{
+    position:'absolute',
+    bottom:70,
+    width:'80%',
+    height:50,
+    zIndex:11
   },
 });
 export default WaveBG;
