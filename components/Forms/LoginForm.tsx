@@ -83,6 +83,11 @@ function LoginForm() {
             "isLoged",
             JSON.stringify({ isLoged: true })
           );
+          await AsyncStorage.setItem(
+            "userData",
+            JSON.stringify({ userData: res.data.SDTClienteTrigenus })
+          );
+          dispatch({ type: "SET_USER_DATA", payload: res.data.SDTClienteTrigenus });
           dispatch({ type: "SET_USER_STATE", payload: true });
         } catch (e) {
           console.log("error ");

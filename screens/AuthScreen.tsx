@@ -7,7 +7,7 @@ import Colors from "../constants/Colors";
 import WaveBG from "../components/WaveBG/WaveBG";
 import LoginForm from "../components/Forms/LoginForm";
 import RegistrationForm from "../components/Forms/RegistrationForm";
-import {View,SafeAreaView} from 'react-native'
+import {View} from 'react-native'
 
 export default function AuthScreen() {
   //@ts-ignore

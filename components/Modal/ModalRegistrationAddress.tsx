@@ -27,6 +27,7 @@ export default function ModalRegistrationAddress({
   const mapRef = useRef<MapView>()
   const dispatch = useDispatch()
   const [coords,setCoords] = useState({latitude:LATITUDE,longitude:LONGITUDE})
+  const [geoPermission,setGeoPermission] = useState(false)
 
   useEffect(() => {
     if (modalVisible) {
@@ -41,6 +42,8 @@ export default function ModalRegistrationAddress({
         alert("Permission to access location was denied");
         return
       }
+
+      setGeoPermission(true)
 
       let location = await Location.getCurrentPositionAsync({});
       setCoords({latitude:location.coords.latitude,longitude:location.coords.longitude})
@@ -88,7 +91,7 @@ export default function ModalRegistrationAddress({
   };
 
   return (
-    <View style={styles.centeredView}>
+    <View style={ geoPermission ? styles.centeredView : {width:0,height:0}}>
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>

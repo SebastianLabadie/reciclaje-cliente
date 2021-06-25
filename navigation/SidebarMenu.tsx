@@ -12,8 +12,8 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import { useDispatch, useSelector } from "react-redux";
-import { TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LinearGradient } from "expo-linear-gradient";
 
 const SidebarMenu = (props: any) => {
 
@@ -21,10 +21,23 @@ const SidebarMenu = (props: any) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {/*Top Large Image */}
-      <Image
-        source={require("../assets/images/quecalvario.jpg")}
-        style={styles.sideMenuProfileIcon}
-      />
+      <LinearGradient
+        colors={['#667eea', '#764ba2']}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+      >
+        <Image
+          source={require("../assets/images/logoTrigenus.png")}
+          style={styles.trigenusLogo}
+        />
+        <View style={styles.houseAndNameContainer}>
+          <Image
+            source={require("../assets/images/house.png")}
+            style={styles.houseImg}
+          />
+          <Text style={styles.txtHouseName}>La casa de deus</Text>
+        </View>
+      </LinearGradient>
       <DrawerContentScrollView {...props} >
         <DrawerItemList {...props} labelStyle={{fontSize:16 }} />
         <View style={styles.customItem}></View>
@@ -35,13 +48,26 @@ const SidebarMenu = (props: any) => {
 };
 
 const styles = StyleSheet.create({
-  sideMenuProfileIcon: {
-    resizeMode: "center",
-    width: 150,
-    height: 150,
-    borderRadius: 100 / 2,
-    marginTop: 50,
+  trigenusLogo: {
+    width: '85%',
+    height: 50,
     alignSelf: "center",
+    marginTop:40
+  },
+  houseAndNameContainer:{
+    alignItems:'center',
+    marginTop:25,
+    marginBottom:10,
+  },
+  houseImg:{
+    width:85,
+    height:85
+  },
+  txtHouseName:{
+    fontSize:20,
+    fontWeight:'bold',
+    color:'white',
+    textAlign:'center'
   },
   customItem: {
     padding: 16,

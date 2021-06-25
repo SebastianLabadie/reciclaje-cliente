@@ -12,21 +12,16 @@ import Colors from "../constants/Colors";
 import { SimpleLineIcons, Ionicons } from "@expo/vector-icons";
 import IconBtn from "../components/Buttons/IconBtn";
 
-function RequestCollectionScreen() {
+function AssociateBagScreen() {
   const navigation = useNavigation();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   //@ts-ignore
-  const bagsToCollect: Array<any> = useSelector((state) => state.requestCollection.bagsToCollect);
+  const bagsToAssociate: Array<any> = useSelector((state) => state.requestCollection.bagsToAssociate);
 
-  console.log("bagstoCoolect: ", bagsToCollect);
+  console.log("bagstoCoolect: ", bagsToAssociate);
 
-  const yellowBags = bagsToCollect?.filter(
-    (bag) => bag.color === "yellow"
-  ).length;
-  const redBags = bagsToCollect?.filter((bag) => bag.color === "red").length;
-  const greenBags = bagsToCollect?.filter((bag) => bag.color == "green").length;
-
+  const inorganicBags = bagsToAssociate?.filter((bag) => bag.type === "inorganic").length;
 
   return (
     <View style={styles.screen}>
@@ -38,30 +33,33 @@ function RequestCollectionScreen() {
         onPress={() => navigation.navigate("ScannBags")}
       >
         <Text style={styles.txtBtn}>
-          {bagsToCollect.length == 0 ? "Escanear QR" : "Escanear Más"}
+          {bagsToAssociate.length == 0 ? "Escanear QR" : "Escanear Más"}
         </Text>
       </TouchableOpacity>
 
-      <View style={styles.bagsToCollectInfoContainer}>
+      <View style={styles.bagsToAssociateInfoContainer}>
         <View style={styles.bagToCollectInfo}>
           <SimpleLineIcons name="bag" size={36} color="yellow" />
-          <Text style={styles.txtBagCount}>{yellowBags}</Text>
+          <Text style={styles.txtBagCount}>{0}</Text>
         </View>
         <View style={styles.bagToCollectInfo}>
           <SimpleLineIcons name="bag" size={36} color="red" />
-          <Text style={styles.txtBagCount}>{redBags}</Text>
+          <Text style={styles.txtBagCount}>{inorganicBags}</Text>
         </View>
         <View style={styles.bagToCollectInfo}>
           <SimpleLineIcons name="bag" size={36} color="green" />
-          <Text style={styles.txtBagCount}>{greenBags}</Text>
+          <Text style={styles.txtBagCount}>{0}</Text>
         </View>
       </View>
 
       <View style={styles.confirmBtnsContainer}>
-        <IconBtn moreStyles={{  marginHorizontal: 20}} onPress={()=>dispatch({type:'CLEAR_BAG_TO_COLLECT'})}>
+        <IconBtn
+          moreStyles={{ marginHorizontal: 20 }}
+          onPress={() => dispatch({ type: "CLEAR_BAG_TO_COLLECT" })}
+        >
           <Ionicons name="close" size={32} color="red" />
         </IconBtn>
-        <IconBtn moreStyles={{  marginHorizontal: 20}} >
+        <IconBtn moreStyles={{ marginHorizontal: 20 }}>
           <Ionicons name="checkmark-sharp" size={32} color="green" />
         </IconBtn>
       </View>
@@ -97,7 +95,7 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     marginBottom: 50,
   },
-  bagsToCollectInfoContainer: {
+  bagsToAssociateInfoContainer: {
     marginBottom: 50,
   },
   bagToCollectInfo: {
@@ -111,10 +109,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
-  confirmBtnsContainer:{
-    flexDirection:'row',
+  confirmBtnsContainer: {
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
 });
-export default RequestCollectionScreen;
+export default AssociateBagScreen;

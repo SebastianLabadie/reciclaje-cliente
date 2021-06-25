@@ -28,19 +28,18 @@ function RegistrationForm() {
     const [padron, setPadron] = useState("");
     const [municipalCode, setMunicipalCode] = useState("");
     const [people, setPeople] = useState(0);
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(0);
+    let progressStep = 0
     //@ts-ignore
     const geoLocation = useSelector(state=>state.auth.registerGeolocation);
     const [hidePass, setHidePass] = useState(true);
     const [modalVisible,setModalVisible] = useState(false)
     const dispatch = useDispatch();
-
     const [age1, setAge1] = useState("");
     const [age2, setAge2] = useState("");
     const [age3, setAge3] = useState("");
     const [age4, setAge4] = useState("");
     const [age5, setAge5] = useState("");
-
   
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const translateXAnim = useRef(new Animated.Value(300)).current;
@@ -117,6 +116,7 @@ function RegistrationForm() {
         
         if (res.data.CodigoRet == 2000) {
             alert("Registrado con exito.")
+            resetFields()
         }else{
             alert("Hubo un problema con los datos enviados.")
         }
@@ -132,11 +132,31 @@ function RegistrationForm() {
     const progressOnPrev  = () =>{
       setStep(step-1)
     }
-   
+
+    const resetFields = () =>{
+      setCI("")
+      setEmail("")
+      setPassword("")
+      setFullName("")
+      setPhone("")
+      setAddress("")
+      setLocalidad("")
+      setPadron("")
+      setMunicipalCode("")
+      setPeople(0)
+      dispatch({type:'SET_REGISTER_GEOLOCATION',payload:false})
+      setStep(0)
+      setAge1("")
+      setAge2("")
+      setAge3("")
+      setAge4("")
+      setAge5("")
+
+    }
     return (
 
         <ScrollView style={{backgroundColor:Colors.light.background,flex:1,paddingTop:20}}>
-          <ProgressSteps >
+          <ProgressSteps>
               <ProgressStep label="Datos Personales" nextBtnText='Siguiente' onPrevious={progressOnPrev} onNext={progressOnNext} nextBtnTextStyle={styles.btnStep} previousBtnTextStyle={styles.btnStep}>
                 <Animated.View style={[styles.formContainer, { opacity: fadeAnim}]}>
                   <Animated.View style={[styles.inputView,{transform:[{translateX:translateXAnim}]}]}>
@@ -342,7 +362,7 @@ function RegistrationForm() {
               <TouchableOpacity>
                 <Text style={styles.forgot}>Olvidaste la contraseña?</Text>
               </TouchableOpacity>
-              {step == 3 ?  <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
+              {step == 2 ?  <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
                 <Text style={styles.loginText}>Registrarse</Text>
               </TouchableOpacity> : null}
               <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>

@@ -19,6 +19,7 @@ import RequestBagsScreen from '../screens/RequestBagsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import CollectionPointsScreen from '../screens/CollectionPointsScreen';
 import ScannBagsCollectinScreen from '../screens/ScannBagCollectionScreen';
+import AssociateBagScreen from '../screens/AssociateBagScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -234,6 +235,42 @@ function CollectionPointsScreenStack({ navigation }:any) {
 }
 
 
+function AssociateBagScreenStack({ navigation }:any) {
+  return (
+    <Stack.Navigator
+      initialRouteName="AssociateBag"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerStructure navigationProps={navigation} />
+        ),
+        headerBackground: () => (
+          <LinearGradient
+          colors={['#667eea', '#764ba2']}
+          style={{ flex: 1 }}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+        />
+        ),
+        headerTintColor: '#fff', 
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+
+      }}>
+
+    <Stack.Screen
+        name="AssociateBag"
+        component={AssociateBagScreen}
+        options={{
+          title: 'Asociar Bolsa', 
+        }}
+      />
+     
+    </Stack.Navigator>
+  );
+}
+
+
 export  function DrawerNavigatorTabs() {
   let isLoged
   //@ts-ignore
@@ -243,6 +280,15 @@ export  function DrawerNavigatorTabs() {
   const getIsloged = async () =>{
     isLoged = await AsyncStorage.getItem("isLoged")
     isLoged != null ? isLoged = JSON.parse(isLoged) : isLoged = {isLoged:false}
+
+    
+    if (isLoged.isLoged) {
+      let userData = await AsyncStorage.getItem("userData")
+      userData = JSON.parse(userData!!) 
+       //@ts-ignore
+      dispatch({ type: "SET_USER_DATA", payload: userData?.userData });
+    }
+
     dispatch({type:'SET_USER_STATE',payload:isLoged.isLoged})
     console.log('nav: ', isLoged)
   }
@@ -279,10 +325,15 @@ export  function DrawerNavigatorTabs() {
           options={{ drawerLabel: 'Solicitar Recolección',  drawerIcon: (tabinfo) => <FontAwesome5 name="recycle" size={24} color={tabinfo.color} /> }}
           component={RequestCollectionScreenStack}
           />
-           <Drawer.Screen
+          <Drawer.Screen
           name="RequestBags"
           options={{ drawerLabel: 'Solicitar Bolsas',  drawerIcon: (tabinfo) => <SimpleLineIcons name="bag" size={24} color={tabinfo.color} /> }}
           component={RequestBagsScreenStack}
+          />
+           <Drawer.Screen
+          name="AssociateBag"
+          options={{ drawerLabel: 'Asociar Bolsa',  drawerIcon: (tabinfo) => <SimpleLineIcons name="bag" size={24} color={tabinfo.color} /> }}
+          component={AssociateBagScreenStack}
           />
           <Drawer.Screen
           name="Signout"
