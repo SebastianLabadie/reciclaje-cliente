@@ -61,25 +61,22 @@ export default function ModalRegistrationAddress({
     camera.zoom -= 0.7;
     camera.center.latitude = lat
     camera.center.longitude = long
-    await myMap!!.animateCamera(camera, { duration: 1000 });
+    await myMap!!.animateCamera(camera, { duration: 200 });
   };
 
 
   const movementMarker = (e: any) => {
-    console.log("movement");
     const latitude = e.nativeEvent.coordinate.latitude;
     const longitude = e.nativeEvent.coordinate.longitude;
 
-    let loc = location;
-    loc!!.coords.latitude = latitude;
-    loc!!.coords.longitude = longitude;
-    setLocation(loc);
+    setCoords({latitude,longitude})
   };
 
 
   const handleConfirm = async () => {
     dispatch({type:'SET_REGISTER_GEOLOCATION',payload:`${coords.latitude},${coords.longitude}`})
     setModalVisible(false)
+
     /* try {
       const res = await axios.get(`https://us1.locationiq.com/v1/reverse.php?key=pk.80b5094cd9229a093d5caa600faaa573&lat=${coords.latitude}&lon=${coords.longitude}&format=json`)
       console.log('res: ',res.data)
@@ -116,7 +113,7 @@ export default function ModalRegistrationAddress({
                     onSelect={(e) => log("onSelect", e)}
                     onDrag={(e) => log("onDrag", e)}
                     onDragStart={(e) => log("onDragStart", e)}
-                    onDragEnd={(e) => log("onDragEnd", e)}
+                    onDragEnd={(e) => movementMarker(e)}
                     onPress={(e) => log("onPress", e)}
                     draggable
                   />

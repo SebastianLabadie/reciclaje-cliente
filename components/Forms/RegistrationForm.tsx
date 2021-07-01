@@ -11,6 +11,7 @@ import {Picker} from '@react-native-picker/picker';
 import { Dimensions } from "react-native";
 //@ts-ignore
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
+import { URL_BASE } from "../../assets/utils";
 
 const splice = function(idx:number, rem:number,mys:string, str:string) {
   return mys.slice(0, idx) + str + mys.slice(idx + Math.abs(rem));
@@ -100,8 +101,8 @@ function RegistrationForm() {
         ClienteCel:phone,
         ClienteEmail:email,
         CliCalUbicacion:address,
-        Latitud:geoLocation.split(",")[0],
-        Longitud:geoLocation.split(",")[1],
+        Latitud:geoLocation.split(",")[1],
+        Longitud:geoLocation.split(",")[0],
         SDTPersonasEnHogar:{
           CantidadDePersonasEnH:people,
           Edades:[...edades]
@@ -111,20 +112,24 @@ function RegistrationForm() {
         Localidad:localidad
       }
  
+      console.log('Cliente Ingresando: ',cliente)
+
       try {
-        const res = await axios.post('http://1.1.9.119:8080/SIGA-WS-TEMP/rest/wsClienteIngresar_rest',cliente)
+        const res = await axios.post(URL_BASE+'wsClienteIngresar_rest',cliente)
         
         if (res.data.CodigoRet == 2000) {
             alert("Registrado con exito.")
             resetFields()
         }else{
             alert("Hubo un problema con los datos enviados.")
+            console.log(res.data)
         }
       } catch (error) {
           console.log("error: ",error)
       }
     }
 
+    
     const progressOnNext  = () =>{
       setStep(step+1)
     }

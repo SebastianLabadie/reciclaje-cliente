@@ -11,17 +11,50 @@ import { useDispatch, useSelector } from "react-redux";
 import Colors from "../constants/Colors";
 import { SimpleLineIcons, Ionicons } from "@expo/vector-icons";
 import IconBtn from "../components/Buttons/IconBtn";
+import axios from "axios";
+import { URL_BASE } from "../assets/utils";
 
 function AssociateBagScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   //@ts-ignore
-  const bagsToAssociate: Array<any> = useSelector((state) => state.requestCollection.bagsToAssociate);
-
-  console.log("bagstoCoolect: ", bagsToAssociate);
+  const bagsToAssociate: Array<any> = useSelector((state) => state.associateBag.bagsToAssociate);
+  //@ts-ignore
+  const userData = useSelector((state) => state.auth.userData);
 
   const inorganicBags = bagsToAssociate?.filter((bag) => bag.type === "inorganic").length;
+
+
+  const handleAssociate = async () =>{
+
+      bagsToAssociate.map(async (bag) => {
+
+        const bags = {
+          EmpresaId : userData.EmpresaId,
+          ArticuloId : 1,
+          ArticuloSerie : bag.serie,
+          ArticuloSts : "C",
+          ArticuloCnd : "N",
+          ArticuloUsrIng : userData.ClienteUsrIng,
+          CentroStkId : 0,
+          ClienteNro: userData.ClienteNro,
+          ArticuloPropiedad : "C",
+          ArticuloCuarentena : true
+        }
+
+        const res = await axios.post(URL_BASE+'wsAltaArticuloSerie',bags)
+
+        if (res.data.ErrCod == 2000) {
+          alert("Bolsa asociada con exito")
+        }else{
+          alert(res.data.Gx_emsg)
+
+        }
+        console.log('res ',res.data)
+      })
+
+  }
 
   return (
     <View style={styles.screen}>
@@ -30,7 +63,7 @@ function AssociateBagScreen() {
       </Text>
       <TouchableOpacity
         style={styles.btnQR}
-        onPress={() => navigation.navigate("ScannBags")}
+        onPress={() => navigation.navigate("ScannBagsAssociate")}
       >
         <Text style={styles.txtBtn}>
           {bagsToAssociate.length == 0 ? "Escanear QR" : "Escanear Más"}
@@ -55,11 +88,11 @@ function AssociateBagScreen() {
       <View style={styles.confirmBtnsContainer}>
         <IconBtn
           moreStyles={{ marginHorizontal: 20 }}
-          onPress={() => dispatch({ type: "CLEAR_BAG_TO_COLLECT" })}
+          onPress={() => dispatch({ type: "CLEAR_BAG_TO_ASSOCIATE" })}
         >
           <Ionicons name="close" size={32} color="red" />
         </IconBtn>
-        <IconBtn moreStyles={{ marginHorizontal: 20 }}>
+        <IconBtn moreStyles={{ marginHorizontal: 20 }} onPress={handleAssociate}>
           <Ionicons name="checkmark-sharp" size={32} color="green" />
         </IconBtn>
       </View>

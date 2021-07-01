@@ -106,3 +106,5 @@ export const getOrdenGen = (Gen) => {
 export const splice = function(idx, rem, str) {
   return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
 };
+
+export const URL_BASE = 'http://192.168.1.115:8080/SIGA-TRIGENUS-WS/rest/'

@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Colors from "../constants/Colors";
 import { SimpleLineIcons, Ionicons } from "@expo/vector-icons";
 import IconBtn from "../components/Buttons/IconBtn";
+import axios from "axios";
+import { URL_BASE } from "../assets/utils";
 
 function RequestCollectionScreen() {
   const navigation = useNavigation();
@@ -18,16 +20,48 @@ function RequestCollectionScreen() {
 
   //@ts-ignore
   const bagsToCollect: Array<any> = useSelector((state) => state.requestCollection.bagsToCollect);
+  //@ts-ignore
+  const userData = useSelector((state) => state.auth.userData);
 
-  console.log("bagstoCoolect: ", bagsToCollect);
+  console.log("bagstoCollect: ", bagsToCollect);
 
-  const yellowBags = bagsToCollect?.filter(
-    (bag) => bag.color === "yellow"
-  ).length;
-  const redBags = bagsToCollect?.filter((bag) => bag.color === "red").length;
-  const greenBags = bagsToCollect?.filter((bag) => bag.color == "green").length;
+  const organicBags = bagsToCollect?.filter((bag) => bag.type === "organic").length;
+  const inorganicBags = bagsToCollect?.filter((bag) => bag.type === "inorganic").length;
+  const nonRecyclableBags = bagsToCollect?.filter((bag) => bag.type == "nonRecyclable").length;
 
 
+  const handleCollect = async () =>{
+
+    bagsToCollect.map(async (bag) => {
+
+      const bags = {
+        EmpresaId : userData.EmpresaId,
+        ClienteNroOrd : userData.ClienteNro,
+        OrdenUsrIng : userData.ClienteUsrIng,
+        ArticuloId : 1, 
+        ArticuloSerie : bag.serie
+      }
+
+      try {
+        const res = await axios.post( URL_BASE+'pComTrigenius001',bags)
+  
+        if (res.data.ErrCod == 2000) {
+          alert("Orden creada con exito.")
+        }else{
+          alert(res.data.Gx_emsg)
+  
+        }
+        console.log('res ',res.data)
+        
+      } catch (error) {
+          console.log(error)
+      }
+    })
+
+}
+
+
+console.log('usedata: ',userData)
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>
@@ -45,15 +79,15 @@ function RequestCollectionScreen() {
       <View style={styles.bagsToCollectInfoContainer}>
         <View style={styles.bagToCollectInfo}>
           <SimpleLineIcons name="bag" size={36} color="yellow" />
-          <Text style={styles.txtBagCount}>{yellowBags}</Text>
+          <Text style={styles.txtBagCount}>{organicBags}</Text>
         </View>
         <View style={styles.bagToCollectInfo}>
           <SimpleLineIcons name="bag" size={36} color="red" />
-          <Text style={styles.txtBagCount}>{redBags}</Text>
+          <Text style={styles.txtBagCount}>{inorganicBags}</Text>
         </View>
         <View style={styles.bagToCollectInfo}>
           <SimpleLineIcons name="bag" size={36} color="green" />
-          <Text style={styles.txtBagCount}>{greenBags}</Text>
+          <Text style={styles.txtBagCount}>{nonRecyclableBags}</Text>
         </View>
       </View>
 
@@ -61,7 +95,7 @@ function RequestCollectionScreen() {
         <IconBtn moreStyles={{  marginHorizontal: 20}} onPress={()=>dispatch({type:'CLEAR_BAG_TO_COLLECT'})}>
           <Ionicons name="close" size={32} color="red" />
         </IconBtn>
-        <IconBtn moreStyles={{  marginHorizontal: 20}} >
+        <IconBtn moreStyles={{  marginHorizontal: 20}} onPress={handleCollect}>
           <Ionicons name="checkmark-sharp" size={32} color="green" />
         </IconBtn>
       </View>

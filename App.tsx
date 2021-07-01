@@ -14,6 +14,8 @@ export default function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
   if (!isLoadingComplete) {
     return null;
   } else {

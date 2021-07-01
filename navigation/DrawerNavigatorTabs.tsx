@@ -20,6 +20,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import CollectionPointsScreen from '../screens/CollectionPointsScreen';
 import ScannBagsCollectinScreen from '../screens/ScannBagCollectionScreen';
 import AssociateBagScreen from '../screens/AssociateBagScreen';
+import ScannBagsAssociateScreen from '../screens/ScannBagAssociateScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -39,7 +40,7 @@ const NavigationDrawerStructure = (props:any) => {
             uri:
               'https://raw.githubusercontent.com/AboutReact/sampleresource/master/drawerWhite.png',
           }}
-          style={{ width: 25, height: 25, marginLeft: 15 }}
+          style={{ width: 25, height: 25, marginRight: 15 }}
         />
       </TouchableOpacity>
     </View>
@@ -51,7 +52,7 @@ function ProfileScreenStack({ navigation }:any) {
     <Stack.Navigator
       initialRouteName="Profile"
       screenOptions={{
-        headerLeft: () => (
+        headerRight: () => (
           <NavigationDrawerStructure navigationProps={navigation} />
         ),
         headerBackground: () => (
@@ -86,7 +87,7 @@ function SignoutScreenStack({ navigation }:any) {
     <Stack.Navigator
       initialRouteName="Signout"
       screenOptions={{
-        headerLeft: () => (
+        headerRight: () => (
           <NavigationDrawerStructure navigationProps={navigation} />
         ),
         headerBackground: () => (
@@ -122,7 +123,7 @@ function RequestCollectionScreenStack({ navigation }:any) {
     <Stack.Navigator
       initialRouteName="RequestCollection"
       screenOptions={{
-        headerLeft: () => (
+        headerRight: () => (
           <NavigationDrawerStructure navigationProps={navigation} />
         ),
         headerBackground: () => (
@@ -167,7 +168,7 @@ function RequestBagsScreenStack({ navigation }:any) {
     <Stack.Navigator
       initialRouteName="RequestBags"
       screenOptions={{
-        headerLeft: () => (
+        headerRight: () => (
           <NavigationDrawerStructure navigationProps={navigation} />
         ),
         headerBackground: () => (
@@ -204,7 +205,7 @@ function CollectionPointsScreenStack({ navigation }:any) {
     <Stack.Navigator
       initialRouteName="CollectionPoints"
       screenOptions={{
-        headerLeft: () => (
+        headerRight: () => (
           <NavigationDrawerStructure navigationProps={navigation} />
         ),
         headerBackground: () => (
@@ -240,7 +241,7 @@ function AssociateBagScreenStack({ navigation }:any) {
     <Stack.Navigator
       initialRouteName="AssociateBag"
       screenOptions={{
-        headerLeft: () => (
+        headerRight: () => (
           <NavigationDrawerStructure navigationProps={navigation} />
         ),
         headerBackground: () => (
@@ -263,6 +264,13 @@ function AssociateBagScreenStack({ navigation }:any) {
         component={AssociateBagScreen}
         options={{
           title: 'Asociar Bolsa', 
+        }}
+      />
+       <Stack.Screen
+        name="ScannBagsAssociate"
+        component={ScannBagsAssociateScreen}
+        options={{
+          title: 'Escanear Bolsa', 
         }}
       />
      

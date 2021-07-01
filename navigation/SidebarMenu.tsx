@@ -27,7 +27,7 @@ const SidebarMenu = (props: any) => {
         end={{x: 1, y: 0}}
       >
         <Image
-          source={require("../assets/images/logoTrigenus.png")}
+          source={require("../assets/images/logoTrigenusWhite.png")}
           style={styles.trigenusLogo}
         />
         <View style={styles.houseAndNameContainer}>
@@ -49,8 +49,9 @@ const SidebarMenu = (props: any) => {
 
 const styles = StyleSheet.create({
   trigenusLogo: {
-    width: '85%',
-    height: 50,
+    width: '95%',
+    height: 60,
+    resizeMode:'center',
     alignSelf: "center",
     marginTop:40
   },

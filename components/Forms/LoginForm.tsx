@@ -6,6 +6,7 @@ import { StyleSheet, Text, TouchableWithoutFeedback,Animated } from "react-nativ
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 
 import { useDispatch } from "react-redux";
+import { URL_BASE } from "../../assets/utils";
 import Colors from "../../constants/Colors";
 
 function LoginForm() {
@@ -72,28 +73,33 @@ function LoginForm() {
         Usuario:user,
         Password:"1234"
       }
-      const res = await axios.post('http://1.1.9.119:8080/SIGA-WS-TEMP/rest/wsLoginTrigenusCliente',login)
+      try {
+        const res = await axios.post(URL_BASE+'wsLoginTrigenusCliente',login)
+    
+        //@ts-ignore
+        if (res.data.isOk) {
+          resetFields()
   
-      //@ts-ignore
-      if (res.data.isOk) {
-        resetFields()
-
-        try {
-          await AsyncStorage.setItem(
-            "isLoged",
-            JSON.stringify({ isLoged: true })
-          );
-          await AsyncStorage.setItem(
-            "userData",
-            JSON.stringify({ userData: res.data.SDTClienteTrigenus })
-          );
-          dispatch({ type: "SET_USER_DATA", payload: res.data.SDTClienteTrigenus });
-          dispatch({ type: "SET_USER_STATE", payload: true });
-        } catch (e) {
-          console.log("error ");
+          try {
+            await AsyncStorage.setItem(
+              "isLoged",
+              JSON.stringify({ isLoged: true })
+            );
+            await AsyncStorage.setItem(
+              "userData",
+              JSON.stringify({ userData: res.data.SDTClienteTrigenus })
+            );
+            dispatch({ type: "SET_USER_DATA", payload: res.data.SDTClienteTrigenus });
+            dispatch({ type: "SET_USER_STATE", payload: true });
+          } catch (e) {
+            console.log("error ");
+          }
+        }else{
+          alert("Error, usuario/contraseña invalidos")
         }
-      }else{
-        alert("Error, usuario/contraseña invalidos")
+        
+      } catch (error) {
+        console.log('errror', error)
       }
     };
   
