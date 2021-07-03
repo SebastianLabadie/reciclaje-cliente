@@ -23,10 +23,6 @@ function ScannBagsAssociateScreen() {
 
   const ONE_SECOND_IN_MS = 1000;
 
-  const getBagData = async ({}:any) => {
-   
-  };
-
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -37,15 +33,13 @@ function ScannBagsAssociateScreen() {
   const handleBarCodeScanned = ({ type, data }: any) => {
     Vibration.vibrate(0.2 * ONE_SECOND_IN_MS);
     
-    handleAssociate(JSON.parse(data))
-   /*  getOrden(JSON.parse(data)); */
-  
+    const bag = JSON.parse(data)
+    
+    handleAssociate(bag)
     setScanned(true);
 
     
-   /*  alert(`Este es el tipo ${type} este es la data: ${data}`) */
-    /* const bag = JSON.parse(data)
-    dispatch({type:'ADD_BAG_TO_ASSOCIATE',payload:bag})  */
+    dispatch({type:'ADD_BAG_TO_ASSOCIATE',payload:bag}) 
   };
 
   if (hasPermission === null) {
@@ -106,9 +100,9 @@ function ScannBagsAssociateScreen() {
     <View style={styles.screen}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
+        style={[StyleSheet.absoluteFillObject,{backgroundColor:'black'}]}
       >
-        <BarcodeMask edgeColor="#62B1F6" showAnimatedLine />
+        <BarcodeMask  edgeColor="#62B1F6" showAnimatedLine />
       </BarCodeScanner>
        {scanned ? <Button title={'Aprieta para escanear devuelta!'} onPress={handleScaned} /> : null} 
 
@@ -116,12 +110,13 @@ function ScannBagsAssociateScreen() {
      
     </View>
   );
+
 }
 
 const styles = StyleSheet.create({
   screen: {
     width: "100%",
-    height: "100%",
+    height: "100%"
   },
 });
 export default ScannBagsAssociateScreen;

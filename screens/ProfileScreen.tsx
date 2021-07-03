@@ -1,31 +1,23 @@
-import {
-  Button,
-  useToast,
-  VStack,
-} from "native-base"
 import * as React from "react";
-import {  StyleSheet, Text } from "react-native";
-import { View } from "../components/Themed";
 import Colors from "../constants/Colors";
-
-
-
-
+import { StoryBook } from "../components/Cards/Storybook";
+import ProfileHeader from "../components/Profile/ProfileHeader";
+import {Box } from 'native-base'
+import CalendarIcon from "../components/CustomIcons/CalendarIcon";
+import StatisticsIcon from "../components/CustomIcons/StatisticsIcon";
+import ConfigIcon from "../components/CustomIcons/ConfigIcon";
+import HandCashIcon from "../components/CustomIcons/HandCashIcon";
 export default function ProfileScreen() {
-  
   return (
-    <View style={styles.screen}>
-    <Text style={{color:'black'}}>Profile</Text>
-
-    </View>
+    <Box flex={1} p={3} alignItems="center" backgroundColor={Colors.light.background} >
+      <ProfileHeader />
+      <Box w="100% " flexDirection="row" flexWrap="wrap" justifyContent="space-between">
+        <StoryBook tag="Gestión" description="Últimas Recolecciones" icon={<CalendarIcon fillColor={Colors.pastelBlue} />} bgColor={Colors.pastelBlue} />
+        <StoryBook tag="Estadísticas" description="Mis Clasificaciones" icon={<StatisticsIcon fillColor={Colors.pastelPiel} />}  bgColor={Colors.pastelPiel} />
+        <StoryBook tag="Configuración" description="Mis Datos" icon={<ConfigIcon fillColor={Colors.pastelBlue} />} bgColor={Colors.pastelBlue} />
+        <StoryBook tag="Gestión" description="Mi Dinero" icon={<HandCashIcon fillColor={Colors.pastelPiel} />}  bgColor={Colors.pastelPiel} />
+      </Box>
+      
+    </Box>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor:Colors.light.background
-  },
-});

@@ -12,6 +12,7 @@ import ExpoNotifications from './components/Notifications/ExpoNotifications';
 import {
   NativeBaseProvider,
 } from "native-base"
+import config from './nativebase.config';
 
 
 export default function App() {
@@ -25,7 +26,7 @@ export default function App() {
   } else {
     return (
       <Provider store={store} >
-        <NativeBaseProvider>
+        <NativeBaseProvider config={config}>
           <ExpoNotifications />
           <Navigation colorScheme={colorScheme} />
           <StatusBar  translucent={true}/>
