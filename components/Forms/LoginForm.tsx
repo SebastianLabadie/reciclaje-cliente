@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, TouchableWithoutFeedback,Animated } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { URL_BASE } from "../../assets/utils";
 import Colors from "../../constants/Colors";
 
@@ -14,6 +14,9 @@ function LoginForm() {
     const [password, setPassword] = useState("");
     const [hidePass, setHidePass] = useState(true);
     const dispatch = useDispatch();
+
+    //@ts-ignore
+    const expoToken = useSelector(state => state.auth.expoToken)
   
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const translateXAnim = useRef(new Animated.Value(300)).current;
@@ -73,6 +76,7 @@ function LoginForm() {
         Usuario:user,
         Password:"1234"
       }
+
       try {
         const res = await axios.post(URL_BASE+'wsLoginTrigenusCliente',login)
     
@@ -81,16 +85,14 @@ function LoginForm() {
           resetFields()
   
           try {
-            await AsyncStorage.setItem(
-              "isLoged",
-              JSON.stringify({ isLoged: true })
-            );
-            await AsyncStorage.setItem(
-              "userData",
-              JSON.stringify({ userData: res.data.SDTClienteTrigenus })
-            );
+            await AsyncStorage.setItem( "isLoged", JSON.stringify({ isLoged: true }));
+            await AsyncStorage.setItem("userData",JSON.stringify({ userData: res.data.SDTClienteTrigenus }));
+            
+
+            checkUserExpoToken(res.data.SDTClienteTrigenus)
             dispatch({ type: "SET_USER_DATA", payload: res.data.SDTClienteTrigenus });
             dispatch({ type: "SET_USER_STATE", payload: true });
+
           } catch (e) {
             console.log("error ");
           }
@@ -99,12 +101,41 @@ function LoginForm() {
         }
         
       } catch (error) {
-        console.log('errror', error)
+        alert(`Error inicio sesion, ${error}`)
       }
     };
   
     const handleRegister = ()=> {
         dispatch({type:'SET_CURRENT_AUTH',payload:'register'})
+    }
+
+    const checkUserExpoToken = async (userData:any) => {
+      const req = {
+        EmpresaId:userData.EmpresaId,
+        ClienteNro:userData.ClienteNro,
+        NotificationToken:expoToken
+      }
+      
+      try {
+        const res = await axios.post(URL_BASE+'wsExpoToken002',req)
+        console.log("check ",req)
+        console.log("check ",res.data)
+
+        if (!res.data.isExiste) {
+          newUserExpoToken(req)
+        }
+      } catch (error) {
+        alert(`Error check expo token, ${error}`)
+      }
+    }
+
+    const newUserExpoToken = async (req:any) =>{
+      try {
+        const res = await axios.post(URL_BASE+'wsExpoToken001',req)
+        console.log("new ",res.data)
+      } catch (error) {
+        alert(`Error new expo token, ${error}`)
+      }
     }
 
     return (

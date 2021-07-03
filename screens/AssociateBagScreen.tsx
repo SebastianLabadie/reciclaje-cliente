@@ -5,14 +5,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableHighlight,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "../constants/Colors";
-import { SimpleLineIcons, Ionicons } from "@expo/vector-icons";
-import IconBtn from "../components/Buttons/IconBtn";
-import axios from "axios";
-import { URL_BASE } from "../assets/utils";
+import { SimpleLineIcons,MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import {Button,Icon} from 'native-base'
 
 function AssociateBagScreen() {
   const navigation = useNavigation();
@@ -26,34 +23,9 @@ function AssociateBagScreen() {
   const inorganicBags = bagsToAssociate?.filter((bag) => bag.type === "inorganic").length;
 
 
-  const handleAssociate = async () =>{
-
-      bagsToAssociate.map(async (bag) => {
-
-        const bags = {
-          EmpresaId : userData.EmpresaId,
-          ArticuloId : 1,
-          ArticuloSerie : bag.serie,
-          ArticuloSts : "C",
-          ArticuloCnd : "N",
-          ArticuloUsrIng : userData.ClienteUsrIng,
-          CentroStkId : 0,
-          ClienteNro: userData.ClienteNro,
-          ArticuloPropiedad : "C",
-          ArticuloCuarentena : true
-        }
-
-        const res = await axios.post(URL_BASE+'wsAltaArticuloSerie',bags)
-
-        if (res.data.ErrCod == 2000) {
-          alert("Bolsa asociada con exito")
-        }else{
-          alert(res.data.Gx_emsg)
-
-        }
-        console.log('res ',res.data)
-      })
-
+  const handleScann= () =>{
+    console.log('scan')
+    navigation.navigate("ScannBagsAssociate")
   }
 
   return (
@@ -61,14 +33,15 @@ function AssociateBagScreen() {
       <Text style={styles.title}>
         ¡Escanee los codigos de las bolsas por favor!
       </Text>
-      <TouchableOpacity
-        style={styles.btnQR}
-        onPress={() => navigation.navigate("ScannBagsAssociate")}
+      <Button
+        startIcon={<Icon as={Ionicons} name="ios-qr-code-sharp" size={5} />}
+        onPress={handleScann}
+        bgColor={'black'}
+        size="sm"
       >
-        <Text style={styles.txtBtn}>
-          {bagsToAssociate.length == 0 ? "Escanear QR" : "Escanear Más"}
-        </Text>
-      </TouchableOpacity>
+       {bagsToAssociate.length == 0 ? "Escanear QR" : "Escanear Más"}
+      </Button>
+     
 
       <View style={styles.bagsToAssociateInfoContainer}>
         <View style={styles.bagToCollectInfo}>
@@ -85,17 +58,6 @@ function AssociateBagScreen() {
         </View>
       </View>
 
-      <View style={styles.confirmBtnsContainer}>
-        <IconBtn
-          moreStyles={{ marginHorizontal: 20 }}
-          onPress={() => dispatch({ type: "CLEAR_BAG_TO_ASSOCIATE" })}
-        >
-          <Ionicons name="close" size={32} color="red" />
-        </IconBtn>
-        <IconBtn moreStyles={{ marginHorizontal: 20 }} onPress={handleAssociate}>
-          <Ionicons name="checkmark-sharp" size={32} color="green" />
-        </IconBtn>
-      </View>
     </View>
   );
 }

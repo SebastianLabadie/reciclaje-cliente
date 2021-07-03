@@ -3,6 +3,7 @@ const SET_USER_STATE = "SET_USER_STATE";
 const SET_CURRENT_AUTH = "SET_CURRENT_AUTH";
 const SET_REGISTER_GEOLOCATION = "SET_REGISTER_GEOLOCATION";
 const SET_USER_DATA = "SET_USER_DATA";
+const SET_EXPO_TOKEN = "SET_EXPO_TOKEN";
 
 //INITIAL STATE
 
@@ -10,7 +11,8 @@ const initialState = {
   userLoged: false,
   currentAuth:'login',
   registerGeolocation:false,
-  userData:''
+  userData:'',
+  expoToken:''
 };
 
 //REDUCERS
@@ -28,6 +30,9 @@ export default function (state = initialState, action) {
 
     case SET_USER_DATA:
       return { ...state, userData: payload };
+
+    case SET_EXPO_TOKEN:
+      return { ...state, expoToken: payload };
 
     default:
       return state;

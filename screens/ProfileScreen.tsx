@@ -1,8 +1,14 @@
-
+import {
+  Button,
+  useToast,
+  VStack,
+} from "native-base"
 import * as React from "react";
 import {  StyleSheet, Text } from "react-native";
 import { View } from "../components/Themed";
 import Colors from "../constants/Colors";
+
+
 
 
 export default function ProfileScreen() {
@@ -10,6 +16,7 @@ export default function ProfileScreen() {
   return (
     <View style={styles.screen}>
     <Text style={{color:'black'}}>Profile</Text>
+
     </View>
   );
 }
