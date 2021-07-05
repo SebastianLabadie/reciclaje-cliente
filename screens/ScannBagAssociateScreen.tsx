@@ -71,26 +71,38 @@ function ScannBagsAssociateScreen() {
         ArticuloCuarentena : true
       }
 
-      const res = await axios.post(URL_BASE+'wsAltaArticuloSerie',bagData)
-
-      if (res.data.ErrCod == 2000) {
-        toast.show({
-          title: "Succes",
-          status: "success",
-          description: "Bolsa asociada con exito",
-          duration:7000,
-          placement: "top",
-          marginTop:20
-        })
-      }else{
+      try {
+        const res = await axios.post(`${URL_BASE}wsAltaArticuloSerie`,bagData)
+  
+        if (res.data.ErrCod == 2000) {
+          toast.show({
+            title: "Succes",
+            status: "success",
+            description: "Bolsa asociada con exito",
+            duration:7000,
+            placement: "top",
+            marginTop:20
+          })
+        }else{
+          toast.show({
+            title: "Error",
+            status: "error",
+            description: `${res.data.ErrCod} - ${res.data.Gx_emsg}`,
+            duration:7000,
+            placement: "top",
+            marginTop:20
+          })
+        }
+        
+      } catch (error) {
         toast.show({
           title: "Error",
           status: "error",
-          description: `${res.data.ErrCod} - ${res.data.Gx_emsg}`,
-          duration:7000,
+          description: `wsAltaArticuloSerie error - ${error}`,
+          duration: 7000,
           placement: "top",
-          marginTop:20
-        })
+          marginTop: 20,
+        });
       }
 
 }

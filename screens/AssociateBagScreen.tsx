@@ -38,6 +38,7 @@ function AssociateBagScreen() {
         onPress={handleScann}
         bgColor={'black'}
         size="sm"
+      
       >
        {bagsToAssociate.length == 0 ? "Escanear QR" : "Escanear Más"}
       </Button>

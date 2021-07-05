@@ -21,6 +21,7 @@ import CollectionPointsScreen from '../screens/CollectionPointsScreen';
 import ScannBagsCollectinScreen from '../screens/ScannBagCollectionScreen';
 import AssociateBagScreen from '../screens/AssociateBagScreen';
 import ScannBagsAssociateScreen from '../screens/ScannBagAssociateScreen';
+import MyDataScreen from '../screens/MyDataScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -74,6 +75,14 @@ function ProfileScreenStack({ navigation }:any) {
         component={ProfileScreen}
         options={{
           title: 'Perfil', 
+        }}
+      />
+
+      <Stack.Screen
+        name="MyData"
+        component={MyDataScreen}
+        options={{
+          title: 'Mis Datos', 
         }}
       />
      

@@ -5,23 +5,17 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableHighlight,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Colors from "../constants/Colors";
-import { SimpleLineIcons, Ionicons } from "@expo/vector-icons";
-import IconBtn from "../components/Buttons/IconBtn";
-import axios from "axios";
-import { URL_BASE } from "../assets/utils";
+import { SimpleLineIcons } from "@expo/vector-icons";
 
 function RequestCollectionScreen() {
   const navigation = useNavigation();
-  const dispatch = useDispatch()
 
   //@ts-ignore
   const bagsToCollect: Array<any> = useSelector((state) => state.requestCollection.bagsToCollect);
-  //@ts-ignore
-  const userData = useSelector((state) => state.auth.userData);
+ 
 
   console.log("bagstoCollect: ", bagsToCollect);
 
@@ -30,38 +24,9 @@ function RequestCollectionScreen() {
   const nonRecyclableBags = bagsToCollect?.filter((bag) => bag.type == "nonRecyclable").length;
 
 
-  const handleCollect = async () =>{
-
-    bagsToCollect.map(async (bag) => {
-
-      const bags = {
-        EmpresaId : userData.EmpresaId,
-        ClienteNroOrd : userData.ClienteNro,
-        OrdenUsrIng : userData.ClienteUsrIng,
-        ArticuloId : 1, 
-        ArticuloSerie : bag.serie
-      }
-
-      try {
-        const res = await axios.post( URL_BASE+'pComTrigenius001',bags)
   
-        if (res.data.ErrCod == 2000) {
-          alert("Orden creada con exito.")
-        }else{
-          alert(res.data.Gx_emsg)
-  
-        }
-        console.log('res ',res.data)
-        
-      } catch (error) {
-          console.log(error)
-      }
-    })
-
-}
 
 
-console.log('usedata: ',userData)
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>
@@ -91,14 +56,6 @@ console.log('usedata: ',userData)
         </View>
       </View>
 
-      <View style={styles.confirmBtnsContainer}>
-        <IconBtn moreStyles={{  marginHorizontal: 20}} onPress={()=>dispatch({type:'CLEAR_BAG_TO_COLLECT'})}>
-          <Ionicons name="close" size={32} color="red" />
-        </IconBtn>
-        <IconBtn moreStyles={{  marginHorizontal: 20}} onPress={handleCollect}>
-          <Ionicons name="checkmark-sharp" size={32} color="green" />
-        </IconBtn>
-      </View>
     </View>
   );
 }

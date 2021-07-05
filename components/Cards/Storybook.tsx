@@ -2,10 +2,14 @@ import React from "react";
 import { Box, Center, Icon, Text,HStack } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import Colors from "../../constants/Colors";
-import CalendarIcon from "../CustomIcons/CalendarIcon";
-import {AntDesign, Ionicons} from '@expo/vector-icons'
-export function StoryBook({ name, nevigateTo,bgColor,tag,description,icon }: any) {
+import {AntDesign} from '@expo/vector-icons'
+export function StoryBook({  navigateTo,bgColor,tag,description,icon }: any) {
   const navigation = useNavigation();
+console.log('navigateTo; '+navigateTo)
+  const handlePress=()=>{
+    console.log('evento')
+    navigation.navigate(`${navigateTo}`)
+  }
 
   return (
     <Box
@@ -17,6 +21,8 @@ export function StoryBook({ name, nevigateTo,bgColor,tag,description,icon }: any
       p={3}
       overflow="hidden"
       mt={3}
+      onTouchStart={handlePress}
+    
     >
       <Center
         w="12"
@@ -25,6 +31,7 @@ export function StoryBook({ name, nevigateTo,bgColor,tag,description,icon }: any
         rounded={14}
         backgroundColor={Colors.black50}
         shadow={2}
+
       >
       {icon}
       </Center>
